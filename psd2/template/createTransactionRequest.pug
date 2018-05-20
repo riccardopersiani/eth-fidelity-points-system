@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    main(role='main')
+        // Main jumbotron for a primary marketing message or call to action
+        .jumbotron
+            .container
+                h2 Form:
+
+                form(name="transaction-request", method="post")
+                    div.input
+                        span.label To Bank Id
+                        input(type="text", name="to_bank_id", value=toBankId)
+                    div.input
+                        span.label To Account Id
+                        input(type="text", name="to_account_id", value=toAccountId)
+                    div.input
+                        span.label Amount
+                        input(type="text", name="amount" value=euroAmount)
+                    div.input
+                        span.label Description
+                        input(type="text", name="description" value= 'tokens = ' + tokenAmount + ' FIDO')
+
+                    div.actions
+                        input(type="submit", value="Submit")
+
+        if data
+            .container
+                h2 Info:
+                p Message: #{message}
+                p Error: #{error}
+                p POSTed URL: #{postUrl}
+                p Body: #{details}
+                p Response from API: #{data}

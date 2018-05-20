@@ -1,0 +1,31 @@
+// File for defining different routes.
+// Refer to gitub.com/fridays/next-routes.
+// () means that a function is invoked after the require.
+const routes = require('next-routes')();
+
+// New route mapping with add(), pattern that we look for and that the file
+routes
+    .add('/index', '/index')
+    .add('/start', '/start')
+    .add('/stats', '/stats')
+    .add('/shop', '/shop')
+    .add('/new', '/new')
+    .add('/newShop', '/newShop')
+    .add(`/shops/0xE82d7CD3186212819D152b6d27ac88762B147F55`, '/shops/0xE82d7CD3186212819D152b6d27ac88762B147F55')
+    .add(`/shops/0x56919f42CcA6B41a0c29E43Cd934b60038092fFF`, '/shops/0x56919f42CcA6B41a0c29E43Cd934b60038092fFF')
+    .add(`/shops/0x36C6BbF42E54a693320E725D46E4363Be6A9e338`, '/shops/0x36C6BbF42E54a693320E725D46E4363Be6A9e338')
+    .add(`/shops/2`, '/shops/shop2')
+    .add(`/shops/3`, '/shops/shop3')
+    .add(`/auth/signIn`, '/auth/signIn')
+    .add(`/auth/signUpUser`, '/auth/signUpUser')
+    .add(`/auth/signUpShop`, '/auth/signUpShop')
+    .add(`/auth/profile`, '/auth/profile')
+    .add(`/psd2/connect`, '/psd2/connect')
+    .add(`/askPayment`, '/askPayment')
+    .add(`/shopRequestStatus`, '/shopRequestStatus')
+    .add(`/shopShipOrder`, '/shopShipOrder')
+    .add(`/userOrderStatus`, '/userOrderStatus')
+    .add(`/approve/approveShop`, '/approve/approveShop')
+    .add(`/approve/approvePayment`, '/approve/approvePayment');
+
+module.exports = routes;
