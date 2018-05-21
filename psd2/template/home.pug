@@ -1,8 +1,8 @@
-extends layout
+extends ../graphic/layout
 
 block content
   main(role='main')
-    // Main jumbotron for a primary marketing message or call to action
+    // Main jumbotron for the primary marketing message
     .jumbotron
       .container
         h1.display-3 PSD2 Payment Home
@@ -11,7 +11,7 @@ block content
         p
           a.btn.btn-primary.btn-lg(href='https://ec.europa.eu/info/law/payment-services-psd-2-directive-eu-2015-2366_en', role='button') Learn more »
     .container
-      // Example row of columns
+      // Row of columns
       .row
         .col-md-4
           h2 Admin Only
@@ -36,7 +36,6 @@ block content
             | With PSD2, the Directive will allow retailers to ‘ask’ consumers for permission to use your bank details. Once you give permission, the retailer will receive the payment directly from your bank – no intermediaries
           p
             a.btn.btn-secondary(href='#', role='button') View details »
-    // /container
 
   // Footer
   include ../graphic/footer.pug
