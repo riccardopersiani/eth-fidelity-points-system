@@ -387,3 +387,6 @@ ethereum/build/FidelityPoints.json
 ethereum/build/Owned.json
 ethereum/build/SafeMath.json
 ethereum/build/IERC20.json
+
+#Icon
+favicon.ico
