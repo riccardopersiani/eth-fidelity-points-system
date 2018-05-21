@@ -1,6 +1,13 @@
 {
-  "name": "fidelity-points-system-thesis",
+  "name": "@riccardopersiani/fidelity-points-system-thesis",
   "version": "1.0.0",
+  "description": "loyalty program blockchain-based app",
+  "bugs": {
+    "url" : "https://github.com/riccardopersiani/fidelity-points-system-thesis/issues",
+    "email" : "r.persiani92@gmail.com"
+    },
+  "license": "MIT",
+  "private": true,
   "main": "index.js",
   "engines": {
     "node": "8.9.4",
@@ -12,8 +19,15 @@
     "start": "next start -p $PORT",
     "heroku-postbuild": "next build"
   },
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name" : "Riccardo Persiani",
+    "email" : "r.persiani92@gmail.com",
+    "url" : "http://riccardopersiani.com/"
+    },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/riccardopersiani/fidelity-points-system-thesis"
+  },
   "dependencies": {
     "connect-flash": "*",
     "cookie-parser": "^1.4.3",
@@ -58,6 +72,5 @@
   },
   "devDependencies": {
     "webpack": "^4.1.1"
-  },
-  "description": ""
+  }
 }
