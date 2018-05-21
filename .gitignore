@@ -1,12 +1,13 @@
 # Created by .ignore support plugin (hsz.mobi)
+
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-### Eclipse template
 
+### Eclipse template
 .metadata
 tmp/
 *.tmp
@@ -377,14 +378,12 @@ logs
 .env
 /.env.production
 
-#NEXT
+# Next
 .next
 
-#VSCODE
-.vscode
-
-# ethereum build file
+# Ethereum build file
 ethereum/build
 ethereum/build/FidelityPoints.json
 ethereum/build/Owned.json
 ethereum/build/SafeMath.json
+ethereum/build/IERC20.json
