@@ -52,9 +52,6 @@ var configFirebase = {
     storageBucket: "test-3ff4d.appspot.com",
     messagingSenderId: "1059441748413"
 };
-if (!firebase.apps.length) {
-    firebase.initializeApp(configFirebase);
-}
 
 // Admin credentials.
 var accountIdISP = "12456734234";
@@ -75,7 +72,6 @@ app.get('/connect', function(req, res){
 
 // Second step of oauth authentication.
 app.get('/callback', function(req, res){
-    console.log("session: ", req.session.oauthRequestToken);
     consumer.getOAuthAccessToken(
         req.session.oauthRequestToken,
         req.session.oauthRequestTokenSecret,
@@ -88,7 +84,6 @@ app.get('/callback', function(req, res){
                 // error is now undefined
                 req.session.oauthAccessToken = oauthAccessToken;
                 req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
-                console.log("res", res);
                 // Redirect to signed_in.
                 res.redirect('/signed_in');
             }
@@ -103,6 +98,7 @@ app.get('/signed_in', function(req, res){
     var options = { "title" : "Sign In failed" }
     // Get PID from the current session.
     var pid = req.session.pid;
+    console.log("SIGNED IN pid", pid);
     // Get the account info of the user signing in.
     consumer.get(apiHost + "/obp/v2.1.0/my/accounts",
         req.session.oauthAccessToken,
@@ -143,6 +139,11 @@ app.get('/home', function(req, res){
 app.get('/createTransactionRequest', function(req, res){
     // Set the template file.
     var template = "./template/createTransactionRequest.pug";
+    var pid = req.session.pid;
+    console.log("SIGNED IN pid", pid);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(configFirebase);
+    }
     // Refer to the specific element of the "pending_payments_psd2" table in firebase.
     var refPsd2Payment = firebase.database().ref("pending_payments_psd2/" + req.session.pid);
     // Take a snapshot of the payment selected.
@@ -151,7 +152,6 @@ app.get('/createTransactionRequest', function(req, res){
         var tokenAmount = snapshot.child("tokenAmount").val();
         // TODO Convertion from the token to €.
         var euroAmount = tokenAmount / 1000 * 700;
-        console.log("\nEuro amount: ", euroAmount, "€");
         // Get the shop id.
         var shopId = snapshot.child("shop").val();
         // Refer to the specific element of the "shops" table in firebase.
@@ -161,7 +161,6 @@ app.get('/createTransactionRequest', function(req, res){
             // Get the shop data desired.
             var toBankId = snapshot.child("bankId").val();
             var toAccountId = snapshot.child("accountId").val();
-            console.log("shopId", shopId);
             var options = {
                 "title": "Create Transaction",
                 "pid": req.session.pid,
@@ -171,22 +170,24 @@ app.get('/createTransactionRequest', function(req, res){
                 "tokenAmount": tokenAmount,
                 "euroAmount": euroAmount,
             };
-            console.log("rendering create Transaction Req: ");
             // Template rendering.
             var html = pug.renderFile(template, options)
             res.status(200).send(html)
 
         }).catch(() => {
-            console.log("Error management TODO");
+            console.log("Error management TODO Catch 1");
         });
     }).catch(()=>{
         // TODO handle error safely.
-        console.log("Error management TODO");
+        console.log("Error management TODO Catch 2");
     });
 });
+
 app.post('/createTransactionRequest', urlencodedParser, function(req, res){
     // Set the template file.
     var template = "./template/createTransactionRequest.pug";
+    console.log("POST req.body.pid: ", req.body.pid);
+    var pid = req.body.pid;
     // Check request body.
     if (!req.body) return res.sendStatus(400);
     // Set bankId of the admin.
@@ -207,16 +208,13 @@ app.post('/createTransactionRequest', urlencodedParser, function(req, res){
     var transactionRequestType = "SANDBOX_TAN";
     // Build the post body.
     var toObj = { "bank_id": toBankId, "account_id": toAccountId };
-    var valueObj = { "currency":currency, "amount":amount };
+    var valueObj = { "currency": currency, "amount": amount };
     var detailsObj = { "to": toObj, "value": valueObj, "description": description };
     var details = JSON.stringify(detailsObj);
     // Set the view field as owner.
     var viewId = "owner";
     var apiHost = config.apiHost;
     var postUrl = apiHost + "/obp/v2.1.0/banks/" + fromBankId + "/accounts/" + fromAccountId + "/" + viewId + "/transaction-request-types/" + transactionRequestType + "/transaction-requests";
-    console.log("\npostUrl is " + postUrl);
-    console.log("\ndetails is: " + details);
-    console.log("\napiHost",apiHost);
     // Perform the POST request.
     consumer.post(postUrl,
         req.session.oauthAccessToken,
@@ -231,14 +229,13 @@ app.post('/createTransactionRequest', urlencodedParser, function(req, res){
             console.log("\nresponse is: " + response)
             // Parsing received data.
             try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(configFirebase);
+                }
                 var parsedData = JSON.parse(data);
-                // TODO Set completed value to true
-                firebase.database().ref('pending_payments_psd2/' + req.session.pid).child("completed").set({
-                    completed: true
-                });
-                console.log("\nparsedData is: " + parsedData)
-                console.log("\nparsedData.id is: " + parsedData.id)
-                console.log("\nparsedData.transaction_ids is: " + parsedData.transaction_ids)
+                // Set completed value to true
+                firebase.database().ref("pending_payments_psd2/" + pid + "/completed/").set(true);
+                console.log("AFTER UPDATE req.session.pid: ", pid);
                 message = "Nothing went wrong";
                 // Set params for the template.
                 var options = {

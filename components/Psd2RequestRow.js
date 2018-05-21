@@ -17,14 +17,15 @@ class Psd2RequestRow extends Component {
         const { Cell, Row } = Table;
         const { id, request, approversCount } = this.props;
 
+        // disabled={request.completed} 
         return (
-            <Row disabled={request.completed} positive={!request.completed}>
+            <Row positive={!request.completed}>
                 <Cell>
-                    {request.completed ? null : (
+                    {/*{request.completed ? null : (*/}
                         <Button color="teal" basic onClick={this.onFinalize} value={id}>
                             Finalize
                         </Button>
-                    )}
+                    {/*)}*/}
                 </Cell>
                 <Cell>{id}</Cell>
                 <Cell>{request.tokenAmount} FID</Cell>
