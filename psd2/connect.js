@@ -6,7 +6,6 @@ import AddNewShopForm from '../components/AddNewShopForm';
 import { Link, Router } from '../routes';
 import fidelityPoints from '../ethereum/fido';
 
-// RISPONDERE CON UNA REDIRECT
 class ConnectPage extends Component {
     state = {
     };
