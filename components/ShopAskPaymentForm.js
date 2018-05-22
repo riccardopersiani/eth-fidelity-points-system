@@ -38,7 +38,7 @@ class ShopAskPaymentForm extends Component {
         // Perform the tokens transfer to the owner.
         const accounts = await web3.eth.getAccounts();
         // valore, nota, metodo
-        await fidelityPoints.methods.createEthereumPaymentRequest(self.state.value, self.state.note, self.state.method, shop.uid)
+        await fidelityPoints.methods.createEthereumPaymentRequest(self.state.value, self.state.note, shop.uid)
         .send({
           from: accounts[0],
           gas: '1000000'

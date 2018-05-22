@@ -5,12 +5,14 @@ const fs = require('fs-extra');
 
 // Take the path of the build directory.
 const buildPath = path.resolve(__dirname, 'build');
-
+console.log("__dirname", __dirname);
+console.log("Build contract in", buildPath);
 // Delete the build directory.
 fs.removeSync(buildPath);
 
 // Take the the correct path of the contract to be compiled.
 const fidelityPointsPath = path.resolve(__dirname, 'contracts', 'FidelityPoints.sol');
+console.log("fidelityPointsPath: ", fidelityPointsPath);
 
 // Now got the contents of FidelityPoint file.
 const sourceFidelityPoints = fs.readFileSync(fidelityPointsPath,'utf8');
@@ -29,4 +31,7 @@ for (let contract in output) {
         output[contract]
     );
 }
+
+console.log("compilation terminated.", output);
+
 

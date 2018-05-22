@@ -1,6 +1,7 @@
 pragma solidity ^0.4.21;
 
 
+// Open Zeppelin library for preventing overflows and underflows.
 library SafeMath {
     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
         if (a == 0) {
@@ -12,9 +13,9 @@ library SafeMath {
     }
 
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        // assert(b > 0); // Solidity automatically throws when dividing by 0
+        // assert(b > 0); // Solidity automatically throws when dividing by 0.
         uint256 c = a / b;
-        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold.
         return c;
     }
 
@@ -31,6 +32,7 @@ library SafeMath {
 }
 
 
+// ERC20 Token interface.
 interface IERC20 {
     function totalSupply() public constant returns (uint256 totalSupply);
     function balanceOf(address _owner) public constant returns (uint256 balance);
@@ -43,6 +45,7 @@ interface IERC20 {
 }
 
 
+// Contract onwer restrictions.
 contract Owned {
     address public owner;
 
@@ -66,33 +69,40 @@ contract FidelityPoints is IERC20, Owned {
     using SafeMath for uint256;
 
     // Restrinct the usage of a function to a shop
+    modifier onlyUser {
+        require(!containsShop(msg.sender));
+        _;
+    }
+
+    // Restrinct the usage of a function to a shop
     modifier onlyShop {
         require(containsShop(msg.sender));
         _;
     }
 
-    // Structure of a payment request done by a shop asking money from the ISP
+    // Structure of a payment request done by a shop asking money from the ISP.
     struct EthereumPaymentRequest {
-        address shop;
-        string note;
-        string method;
-        uint value;
-        string shopId;
-        bool completed;
+        address shop;       // Ethereum address of the shop, sender of the request.
+        string note;        // Additional notes for the admin
+        uint value;         // Amount of ethereum to be transfered
+        string shopId;      // Id of the shop who is making the request in order to get its data from the database
+        bool completed;     // Flag regarding the admin execution of the payment
+        bool rejected;      // Flag regarding the approvation status of the request
     }
 
-    // Structure of a buy request done by a user for buying a product from a shop
+    // Structure of a buy request done by a user for buying a product from a shop.
     struct BuyingRequest {
-        address user;
-        address shop;
-        string product;
-        string shopName;
-        string userId;
-        uint value;
-        bool shipped;
+        address user;       // Ethereum address of the user, sender of the request.
+        address shop;       // Ethereum address of the shop, receiver of the request.
+        string product;     // Id of the product object to be bought.
+        string shopEmail;   // Email of the shop, used for diplaying the request to its belonging shops.
+        string userId;      // Id of the user, used for showing him every request he has performed.
+        uint value;         // Tokens used for buying the product, they are sent with the request
+        bool shipped;       // Flag regarding the shipment status of the request
+        bool rejected;       // Flag regarding the approvation status of the request
     }
 
-    // Contract variables
+    // Contract variables.
     uint public constant INITIAL_SUPPLY =  1000000000000;                // Initial supply of tokens: 1.000.000.000.000
     uint public _totalSupply =  0;                                      // Total amount of tokens
     address public owner;                                               // Address of the contract owner
@@ -100,33 +110,41 @@ contract FidelityPoints is IERC20, Owned {
     EthereumPaymentRequest[] public ethereumPaymentRequests;            // Array of shop payment requests
     BuyingRequest[] public buyingRequests;                              // Array of user buy requests
 
-    // Cryptocurrency characteristics
+    // Cryptocurrency characteristics.
     string public constant symbol = "FID";                              // Cryprocurrency symbol
     string public constant name = "Fido Coin";                          // Cryptocurrency name
     uint8 public constant decimals = 18;                                // Standard number for Eth Token
     uint256 public constant RATE = 1000000000000000000;                 // 1 ETH = 10^18 FID;
 
-    // Map definions
+    // Map definions.
     mapping (address => uint256) public balances;                       // Map [User,Amount]
     mapping (address => bool) public shopsMap;                          // Map [Shop,Official]
     mapping (address => mapping (address => uint256)) public allowed;   // Map [User,[OtherUser,Amount]]
 
-    // Events definition
-    // This notify clients about the transfer
+    // Events definition.
+    // This notify clients about the transfer.
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    // This notifies clients about approvation
+    // This notifies clients about approvation.
     //event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-    // This notifies clients about the account freezing
+    // This notifies clients about the account freezing.
     // event FrozenFunds(address target, bool frozen);
-    // This notifies clients about the amount burnt
+    // This notifies clients about the amount burnt.
     // event Burn(address indexed _from, uint256 _value);
 
-    // Constructor, set the contract sender/deployer as owner
+    // Constructor, set the contract sender/deployer as owner.
     function FidelityPoints() public {
+        // Check for the null address.
         require(msg.sender != 0x00);
-        _totalSupply = INITIAL_SUPPLY * 10 ** uint256(decimals); //update total supply with decimal
+        // Update total supply with decimals.
+        _totalSupply = INITIAL_SUPPLY * 10 ** uint256(decimals);
+        // Give an initial supply to the contract creator.
         balances[msg.sender] = _totalSupply;
+        // Who deploys the contract is the owner.
         owner = msg.sender;
+        // Add owner in shops Array.
+        shops.push(owner);
+        // add owner in shopsMap.
+        shopsMap[owner] = true;
     }
 
     /******************************************************************************
@@ -135,18 +153,18 @@ contract FidelityPoints is IERC20, Owned {
      * This allow people to just send money directly to the contract address.     *
      ******************************************************************************/
     function () public payable {
-        // People will send money directly to the contract address
+        // People will send money directly to the contract address.
     }
 
     /*****************************************************************************
-    * Check if a shop exists                                                     *
+    * Check if a shop exists.                                                    *
     ******************************************************************************/
     function containsShop(address _shop) public view returns (bool) {
         return shopsMap[_shop];
     }
 
     /*****************************************************************************
-    * Perform a FIDO token generation                                            *
+    * Perform a FIDO token generation.                                           *
     ******************************************************************************/
     function createTokens() public payable onlyOwner {
         // Check if the amount trasfered is greather than 0
@@ -163,9 +181,9 @@ contract FidelityPoints is IERC20, Owned {
     }
 
     /*****************************************************************************
-    * Perform a payment with the ETH cryptocurrency                              *
+    * Perform a payment with the ETH cryptocurrency.                             *
     *                                                                            *
-    * Return true if success                                                     *
+    * Return true if success.                                                    *
     *                                                                            *
     * @param _to the address of the receiver                                     *
     * @param _value amount of ETH transfered                                     *
@@ -220,7 +238,7 @@ contract FidelityPoints is IERC20, Owned {
         require(_to != 0x0);
         // Check for overflows
         require(balances[_to] + _value > balances[_to]);
-        // Check for underflows ?
+        // Check for underflows
         require(balances[msg.sender] - _value < balances[msg.sender]);
         // Save for the future assertion
         uint previousBalances = balances[msg.sender].add(balances[_to]);
@@ -276,10 +294,9 @@ contract FidelityPoints is IERC20, Owned {
     *                                                                            *
     * @param _value                                                              *
     * @param _note                                                               *
-    * @param _method                                                             *
     * @param _shopId                                                             *
     ******************************************************************************/
-    function createEthereumPaymentRequest(uint _value, string _note, string _method, string _shopId)
+    function createEthereumPaymentRequest(uint _value, string _note, string _shopId)
         public onlyShop returns (bool) {
             // Check if the sender has enough
             require(balances[msg.sender] >= _value);
@@ -295,10 +312,10 @@ contract FidelityPoints is IERC20, Owned {
             EthereumPaymentRequest memory ethereumPaymentRequest = EthereumPaymentRequest({
                 shop: msg.sender,
                 note: _note,
-                method: _method,
                 value: _value,
                 shopId: _shopId,
-                completed: false
+                completed: false,
+                rejected: false
             });
             // Adding a new ethereum payment request
             ethereumPaymentRequests.push(ethereumPaymentRequest);
@@ -322,14 +339,13 @@ contract FidelityPoints is IERC20, Owned {
     *                                                                            *
     *                                                                            *
     * @param _product                                                            *
-    * @param _shopName                                                           *
+    * @param _shopEmail                                                           *
     * @param _receiver                                                           *
     * @param _value                                                              *
     * @param _userId                                                             *
     ******************************************************************************/
-    function createBuyingRequest(string _product, string _shopName, address _receiver, uint _value, string _userId)
-        public returns (bool) {
-            //TODO REQUIRE NO SHOP
+    function createBuyingRequest(string _product, string _shopEmail, address _receiver, uint _value, string _userId)
+        public onlyUser returns (bool) {
             // Check if the sender has enough
             require(balances[msg.sender] >= _value);
             // Check if the amount trasfered is greather than 0
@@ -338,17 +354,18 @@ contract FidelityPoints is IERC20, Owned {
             require(owner != 0x0);
             // Check for overflows
             require(balances[owner] + _value > balances[owner]);
-            // Check for underflows ?
+            // Check for underflows
             require(balances[msg.sender] - _value < balances[msg.sender]);
             // Create the new BuyingRequest
             BuyingRequest memory buyingRequest = BuyingRequest({
                 user: msg.sender,
                 shop: _receiver,
                 product: _product,
-                shopName: _shopName,
+                shopEmail: _shopEmail,
                 value: _value,
                 userId: _userId,
-                shipped: false
+                shipped: false,
+                rejected: false
             });
             // Adding a new buy request
             buyingRequests.push(buyingRequest);
@@ -382,18 +399,36 @@ contract FidelityPoints is IERC20, Owned {
     }
 
     /****************************************************************************
-    * Owner accepts the request and shop is notified                            *
+    * Shop accepts the request and user is notified                             *
     *                                                                           *
-    * Owner finalize the request manually                                       *
+    * shop ship the product if phisical                                         *
     *                                                                           *
     * @param _index                                                             *
     *****************************************************************************/
     function finalizeUserRequestBuy(uint _index) public onlyShop {
         BuyingRequest storage buyingRequest = buyingRequests[_index];
+        // Check if the product of the request is not reject.
+        require(!buyingRequests[_index].rejected);
         // Check if the product of the request is still not shipped.
         require(!buyingRequests[_index].shipped);
         // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
         buyingRequest.shipped = true;
+    }
+
+    /****************************************************************************
+    * Shop rejected the request and user is notified                            *
+    *                                                                           *
+    * If the product has been shipped it can still be rejected                  *
+    * tokens should be given back later                                         *
+    *                                                                           *
+    * @param _index                                                             *
+    *****************************************************************************/
+    function rejectUserRequestBuy(uint _index) public onlyShop {
+        BuyingRequest storage buyingRequest = buyingRequests[_index];
+        // Check if the product of the request is still not rejected.
+        require(!buyingRequests[_index].rejected);
+        // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
+        buyingRequest.rejected = true;
     }
 
     /****************************************************************************
@@ -405,15 +440,32 @@ contract FidelityPoints is IERC20, Owned {
     *****************************************************************************/
     function finalizeRequestEthereum(uint _index) public onlyOwner payable {
         EthereumPaymentRequest storage ethereumPaymentRequest = ethereumPaymentRequests[_index];
-        // Check if still not collected.
+        // Check if not rejected.
+        require(!ethereumPaymentRequests[_index].rejected);
+        // Check if still not finalized.
         require(!ethereumPaymentRequests[_index].completed);
         // Convert Token to ethereum.
         uint256 ethValue = ethereumPaymentRequest.value.div(RATE);
         // Trasfer ethereum amount to the shop.
-        //TODO controllare che sia in ehtereum il pagamento
+        //TODO controllare che il pagamento sia in Eth
         ethereumPaymentRequest.shop.transfer(ethValue);
         // Set status to completed.
         ethereumPaymentRequest.completed = true;
+    }
+
+    /****************************************************************************
+    * Owner reject the request and shop is notified                             *
+    *                                                                           *
+    * @param _index                                                             *
+    *****************************************************************************/
+    function rejectRequestEthereum(uint _index) public onlyOwner {
+        EthereumPaymentRequest storage ethereumPaymentRequest = ethereumPaymentRequests[_index];
+        // Check if already finalized.
+        require(!ethereumPaymentRequests[_index].completed);
+        // Check if the product of the request is still not rejected.
+        require(!ethereumPaymentRequests[_index].rejected);
+        // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
+        ethereumPaymentRequest.rejected = true;
     }
 
     /*****************************************************************************

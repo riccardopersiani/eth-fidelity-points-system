@@ -8,7 +8,8 @@ import BuyProductForm from '../../components/BuyProductForm';
 class ProductIndex extends Component {
 
     state = {
-        receiver: '0x340595e0C76230D49fcf3a7c1dC317378BC929a3'
+        receiver: '0x340595e0C76230D49fcf3a7c1dC317378BC929a3',
+        email: ''
     }
 
     render() {
@@ -33,25 +34,7 @@ class ProductIndex extends Component {
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <BuyProductForm shopName="Tech Shop" product="smartphone1" receiver={this.state.receiver} tokens="1000"/>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Smartpthone
-                            </Card.Header>
-                            <Card.Meta>
-                                Version 1
-                            </Card.Meta>
-                            <Card.Description>
-                                1000 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Tech Shop" product="smartphone1" receiver={this.state.receiver} tokens="1000"/>
+                            <BuyProductForm shopEmail={this.state.email} product="smartphone1" receiver={this.state.receiver} tokens="1000"/>
                         </Card.Content>
                     </Card>
 

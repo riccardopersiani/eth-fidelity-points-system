@@ -21,6 +21,7 @@ routes
     .add(`/askPayment`, '/askPayment')
     .add(`/shopRequestStatus`, '/shopRequestStatus')
     .add(`/shopShipOrder`, '/shopShipOrder')
+    .add(`/adminShipOrder`, '/adminShipOrder')
     .add(`/userOrderStatus`, '/userOrderStatus')
     .add(`/approve/approveShop`, '/approve/approveShop')
     .add(`/approve/approvePayment`, '/approve/approvePayment');

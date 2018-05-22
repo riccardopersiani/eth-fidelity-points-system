@@ -37,24 +37,18 @@ class ShopRequestStatusTable extends Component {
     // Getting data when component is mounting
     async componentDidMount() {
         var self = this;
-        // Get the shop Id of which I need to show the payments
-        //var shop = firebase.auth().currentUser;
-        //console.log("shopId:", shopId);
         this.loadData()
         .then(async (snapshot) => {
             console.log("snapshot:", snapshot);
             var promise = new Promise((resolve, reject) => {
-            console.log("Nella promise");
-            // Shop id
-            snapshot.forEach(item => {
-                //if(item.val().shop === curret)
-                self.state.psd2Requests.push(item);
+                console.log("Nella promise");
+                // Shop id
+                snapshot.forEach(item => {
+                    self.state.psd2Requests.push(item);
+                });
+                resolve();
             });
-            resolve();
-            });
-
             console.log("psd2Requests: ", self.state.psd2Requests);
-
             const ethereumRequestCount = await fidelityPoints.methods.getRequestsCount().call();
             console.log("ethereumRequestCount:", ethereumRequestCount);
             // inside I have the list of all different indexes of campaign, try it in terminal
@@ -66,9 +60,7 @@ class ShopRequestStatusTable extends Component {
                 })
             );
             console.log("ethereumRequests:", ethereumRequests);
-
             self.setState({ ethereumRequestCount, ethereumRequests, snapshot, loadingRenderFirst: false });
-
             return promise;
         })
         .catch(err => {
@@ -77,11 +69,10 @@ class ShopRequestStatusTable extends Component {
     }
 
     renderRowsEthereumShop() {
-        console.log("ethereumRequests RENDERRR:", this.state.ethereumRequests);
+        console.log("ethereumRequests render:", this.state.ethereumRequests);
         var shopId = firebase.auth().currentUser.uid;
         console.log("shopId: ", shopId);
         return this.state.ethereumRequests.map((request, index) => {
-            //console.log("ETHER request: ", request);
             console.log("request.shop: ", request.shop);
             console.log("shopId: ", request);
             if(request.shopId == shopId){

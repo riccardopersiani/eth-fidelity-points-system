@@ -14,7 +14,7 @@ const provider = new HDWalletProvider(
 // Completely enabled for the Rinkeby network; can use it to deploy contract, send ether etc...
 const web3 = new Web3(provider);
 
-// deploy the contract to Rinkeby.
+// deploy the contract to Rinkeby test network.
 const deploy = async () => {
     const accounts = await web3.eth.getAccounts();
 
@@ -30,4 +30,5 @@ const deploy = async () => {
 
     console.log('Contract deployed to', result.options.address);
 };
+
 deploy();

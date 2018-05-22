@@ -3,7 +3,7 @@ import * as firebase from "firebase";
 import { Button, Checkbox, Icon, Table } from "semantic-ui-react";
 import fidelityPoints from "../../ethereum/fido";
 import web3 from "../../ethereum/web3";
-import OrderequestRow from "./OrderRequestRow";
+import OrderRequestRow from "./OrderRequestRow";
 
 class ShopShipOrderForm extends Component {
     state = {
@@ -29,19 +29,26 @@ class ShopShipOrderForm extends Component {
             })
         );
         console.log("buyingRequests:", buyingRequests);
-        self.setState({ buyingRequestCount, buyingRequests, snapshot, loadingRenderFirst: false });
+        self.setState({ buyingRequestCount, buyingRequests, loadingRenderFirst: false });
     }
 
     renderRows() {
+        // Get the id of the shop logged in.
+        var shopId = firebase.auth().currentUser.uid;
+        console.log("shopId: ", shopId);
         console.log("state buyingRequests:", this.state.buyingRequests);
+        // Get all the buying request from all the users.
         return this.state.buyingRequests.map((request, index) => {
             console.log("request: ", request);
-            return <OrderRequestRow
-                key={index}
-                id={index}
-                request={request}
-            />
-        })
+            // Show only the request to the current shop logged in.
+            if(request.shopId == shopId){
+                return <OrderRequestRow
+                    key={index}
+                    id={index}
+                    request={request}
+                />
+            }
+        });
     }
 
     render() {

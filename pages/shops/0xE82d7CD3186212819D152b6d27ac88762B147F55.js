@@ -14,7 +14,8 @@ class ProductIndex extends Component {
     }
 
     state = {
-        receiver: this.props.owner
+        receiver: this.props.owner,
+        email: "r.persiani92@gmail.com"
     }
 
     render() {
@@ -39,100 +40,9 @@ class ProductIndex extends Component {
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="smartphone1" receiver={this.state.receiver} tokens="1000"/>
+                            <BuyProductForm shopEmail={this.state.email} product="smartphone1" receiver={this.state.receiver} tokens="1000"/>
                         </Card.Content>
                     </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Smartpthone
-                            </Card.Header>
-                            <Card.Meta>
-                                Version 1
-                            </Card.Meta>
-                            <Card.Description>
-                                1000 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="smartphone2" receiver={this.state.receiver} tokens="1000"/>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Tablet
-                            </Card.Header>
-                            <Card.Meta>
-                                Version 2
-                            </Card.Meta>
-                            <Card.Description>
-                                2000 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="tablet1" receiver={this.state.receiver} tokens="2000"/>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Personal Computer
-                            </Card.Header>
-                            <Card.Meta>
-                                Last model
-                            </Card.Meta>
-                            <Card.Description>
-                                5000 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="pc1" receiver={this.state.receiver} tokens="5000"/>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                EBook Reader
-                            </Card.Header>
-                            <Card.Meta>
-                                Last model
-                            </Card.Meta>
-                            <Card.Description>
-                                500 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="ebookReader1" receiver={this.state.receiver} tokens="500"/>
-                        </Card.Content>
-                    </Card>
-
-                    <Card>
-                        <Card.Content>
-                            <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                            <Card.Header>
-                                Headphones
-                            </Card.Header>
-                            <Card.Meta>
-                                Last model
-                            </Card.Meta>
-                            <Card.Description>
-                                200 FIDO
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            <BuyProductForm shopName="Main Shop" product="headphones1" receiver={this.state.receiver} tokens="200"/>
-                        </Card.Content>
-                    </Card>
-
                 </Card.Group>
                 <br/>
             </Layout>

@@ -112,7 +112,7 @@ function ShopLogged() {
 
       <Menu.Item key="u" name="shipOrder">
         <Link route="/shopShipOrder">
-          <a>Ship Order</a>
+          <a>Complete Order</a>
         </Link>
       </Menu.Item>
 
@@ -186,6 +186,11 @@ function AdminLogged() {
       <Menu.Item name="approvePayment">
         <Link route="/approve/approvePayment">
           <a>Approve Payments</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item name="shipOrder">
+        <Link route="/adminShipOrder">
+          <a>Complete Order</a>
         </Link>
       </Menu.Item>
       <Dropdown item text="Welcome Admin">

@@ -5,18 +5,18 @@ import Footer from "../components/Footer";
 import ShopShipOrderForm from "../components/shop/ShopShipOrderForm";
 import { Link, Router } from "../routes";
 
-class ShopShipOrderPage extends Component {
+class AdminShipOrderPage extends Component {
     render() {
         return (
         <div>
             <HeaderTop />
             <Container text style={{ marginTop: "7em" }}>
-            <Header as="h1">Shipping Order page</Header>
-            <br />
-            <p>
-                Hello shop, here you can mark as shipped the product request by a user with an order.
-            </p>
-            <br />
+                <Header as="h1">Complete Order page</Header>
+                <br />
+                <p>
+                    Hello admin, here you can mark as shipped the product request by a user with an order.
+                </p>
+                <br />
                 {this.props.children}
             </Container>
             <div>
@@ -28,4 +28,4 @@ class ShopShipOrderPage extends Component {
     }
 }
 
-export default ShopShipOrderPage;
+export default AdminShipOrderPage;

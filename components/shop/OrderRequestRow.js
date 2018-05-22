@@ -59,16 +59,6 @@ class OrderRequestRow extends Component {
         });
     }
 
-   /*
-    user: msg.sender,
-    shop: _receiver,
-    product: _product,
-    shopName: _shopName,
-    value: _value,
-    userId: _userId,
-    shipped: false
-    */
-
     render() {
         const { Cell, Row } = Table;
         const { id, request } = this.props;
