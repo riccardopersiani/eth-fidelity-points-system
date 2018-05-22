@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Image, Header, Card } from 'semantic-ui-react';
-import Layout from '../../components/Layout';
+import Layout from '../../components/template/Layout';
 import fidelityPoints from '../../ethereum/fido';
 import { Link } from '../../routes';
-import BuyProductForm from '../../components/BuyProductForm';
+import BuyProductForm from '../../components/user/BuyProductForm';
 
 class ProductIndex extends Component {
 

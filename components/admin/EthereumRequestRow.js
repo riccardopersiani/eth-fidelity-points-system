@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button } from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
-import fidelityPoints from "../ethereum/fido";
+import web3 from '../../ethereum/web3';
+import fidelityPoints from "../../ethereum/fido";
 
 class EthereumRequestRow extends Component {
 

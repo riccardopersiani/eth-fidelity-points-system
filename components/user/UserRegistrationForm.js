@@ -1,29 +1,26 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Message, Select, Radio, TextArea, Checkbox } from "semantic-ui-react";
-import { Router } from "../routes";
+import { Router } from "../../routes";
 import * as firebase from "firebase";
-import { countryOptions, options } from "../others/common";
+import { countryOptions, options } from "../../others/common";
 
-class ShopRegistrationForm extends Component {
+class UserRegistrationForm extends Component {
   state = {
-    shopName: "",
-    ownerFirstName: "",
+    firstName: "",
+    lastName: "",
     country: "",
     gender: "",
     phone: "",
     email: "",
     city: "",
-    shopAddress: "",
+    address: "",
     zipCode: "",
     ethereum: "",
     username: "",
     password: "",
     confirmPassword: "",
-    bankId: "",
-    accountId: "",
-    ownerLastName: "",
-    errorMessage: "",
-    approved: false,
+    mail_validated: false,
+    errorMessage: '',
   };
 
   // Functions for handling changes in dropdown fields
@@ -60,84 +57,74 @@ class ShopRegistrationForm extends Component {
     return isError;
   };
 
-  // Submit the shop request
+  // Submit the user request
   onSubmit = async event => {
     event.preventDefault();
     var self = this;
     // Perform the form validation
-    const err = this.validate();
+    //const err = this.validate();
+    const err = false;
     if (!err) {
-      // Create a new shop with username and password and log in instantly
-      console.log("Create a new SHOP with email and password");
-      firebase.auth().createUserWithEmailAndPassword(self.state.email, self.state.password)
-        .then(response => console.log("response in then: ", response))
-        .catch(e => console.log("Shop Creaton failed:", e.message)) //TODO
-        .finally(() => {
-          var shop = firebase.auth().currentUser;
-          console.log("SHOP: ",shop);
-          // Send email verification to the shop after registering him with emailVerified = false.
-          shop.sendEmailVerification()
+      // Create a new user with username and password and log in instantly
+      console.log("Create a new user with email and password");
+      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((response) => {
+          console.log("response in then: ", response)
+
+          var user = firebase.auth().currentUser;
+          // Send email verification to the user after registering him with emailVerified = false.
+          user.sendEmailVerification()
             .then(function() {
-              alert("Email Verification for Shop Sent!");
-              firebase.app().database().ref("shops/" + shop.uid)
+              console.log("ADDING USER", user);
+              console.log("ADDING USER ID", user.uid);
+              // If email is sent, save the user in the db.
+              firebase.app().database().ref("users/" + user.uid)
                 .set({
-                  shopName: self.state.shopName,
-                  ownerFirstName: self.state.ownerFirstName,
-                  ownerLastName: self.state.ownerLastName,
+                  firstname: self.state.firstName,
+                  lastname: self.state.lastName,
                   gender: self.state.gender,
                   country: self.state.country,
                   city: self.state.city,
-                  phone: self.state.phone,
                   email: self.state.email,
                   zipcode: self.state.zipCode,
-                  shopAddress: self.state.shopAddress,
-                  //ibanCode: self.state.ibanCode,
-                  bankId: self.state.bankId,
-                  accountId: self.state.accountId,
+                  address: self.state.address,
                   ethereum: self.state.ethereum,
-                  username: self.state.username,
-                  approved: false,
+                  username: self.state.username
                 })
+                .then(() => alert("Email Verification Sent!"))
                 .catch(error => {
                   self.setState({ errorMessage: error.message });
                 });
             })
             .catch(function(error) {
-              alert("Error in sending email verification");
               self.setState({ errorMessage: error.message });
-            });
-        });
+            })
+        })
+        .catch(e => console.log("User Creaton failed:", e.message));
       // Redirect to home
       //window.location.replace("http://localhost:3000/index");
     }
   };
 
   render() {
+
     return (
       <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="Shop name"
-            placeholder="Shop name"
-            onChange={event => this.setState({ shopName: event.target.value })}
-            value={this.state.shopName}
+            label="First name"
+            placeholder="First name"
+            onChange={event => this.setState({ firstName: event.target.value })}
+            value={this.state.firstName}
             required
           />
           <Form.Field
             control={Input}
-            label="Owner first name"
-            placeholder="Owner first name"
-            onChange={event => this.setState({ ownerFirstName: event.target.value })}
-            value={this.state.ownerFirstName}
-            required
-          />
-          <Form.Field
-            control={Input}
-            label="Owner last name"
-            placeholder="Owner last name"
-            onChange={event => this.setState({ ownerLastName: event.target.value })}
-            value={this.state.ownerLastName}
+            label="Last name"
+            placeholder="Last name"
+            onChange={event => this.setState({ lastName: event.target.value })}
+            value={this.state.lastName}
             required
           />
         </Form.Group>
@@ -179,6 +166,7 @@ class ShopRegistrationForm extends Component {
             placeholder="Email"
             onChange={event => this.setState({ email: event.target.value })}
             value={this.state.email}
+            autoComplete='email'
             required
           />
         </Form.Group>
@@ -203,10 +191,10 @@ class ShopRegistrationForm extends Component {
           />
           <Form.Field
             control={Input}
-            label="Shop address"
-            placeholder="Shop address"
-            onChange={event => this.setState({ shopAddress: event.target.value })}
-            value={this.state.shopAddress}
+            label="Address"
+            placeholder="Address"
+            onChange={event => this.setState({ address: event.target.value })}
+            value={this.state.address}
             required
           />
         </Form.Group>
@@ -233,7 +221,9 @@ class ShopRegistrationForm extends Component {
             control={Input}
             label="Confirm Password"
             placeholder="Confirm Password"
-            onChange={event => this.setState({ confirmPassword: event.target.value })}
+            onChange={event =>
+              this.setState({ confirmPassword: event.target.value })
+            }
             value={this.state.confirmPassword}
             type="password"
             required
@@ -248,25 +238,6 @@ class ShopRegistrationForm extends Component {
           value={this.state.ethereum}
           required
         />
-        psd201-bank-y--uk
-        <Form.Field
-          control={Input}
-          label="Bank Id"
-          placeholder="Bank Id"
-          onChange={event => this.setState({ bankId: event.target.value })}
-          value={this.state.bankId}
-          required
-        />
-        45355323453
-        <Form.Field
-          control={Input}
-          label="Account Id"
-          placeholder="Account Id"
-          onChange={event => this.setState({ accountId: event.target.value })}
-          value={this.state.accountId}
-          type="number"
-          required
-        />
 
         <Form.Field
           control={Checkbox}
@@ -279,4 +250,4 @@ class ShopRegistrationForm extends Component {
   }
 }
 
-export default ShopRegistrationForm;
+export default UserRegistrationForm;

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
 import { Button, Checkbox, Icon, Table } from "semantic-ui-react";
-import fidelityPoints from "../ethereum/fido";
-import web3 from "../ethereum/web3";
+import fidelityPoints from "../../ethereum/fido";
+import web3 from "../../ethereum/web3";
 import EthereumRequestRow from "./EthereumRequestRow";
 import Psd2RequestRow from "./Psd2RequestRow";
 

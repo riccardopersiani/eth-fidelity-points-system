@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Input, Message, Header } from 'semantic-ui-react';
-import Layout from '../components/Layout';
+import Layout from '../components/template/Layout';
 import TransferTokensForm from '../components/TransferTokensForm';
 import { Link, Router } from '../routes';
 import * as firebase from 'firebase';
@@ -14,17 +14,6 @@ class BlockchainPayementIndex extends Component {
     }
 
     render() {
-        var config = {
-            apiKey: "AIzaSyB7-H-6t5kb5D8XB9jf33SVkpjgmeJqATg",
-            authDomain: "test-3ff4d.firebaseapp.com",
-            databaseURL: "https://test-3ff4d.firebaseio.com",
-            projectId: "test-3ff4d",
-            storageBucket: "test-3ff4d.appspot.com",
-            messagingSenderId: "1059441748413"
-        };
-        if (!firebase.apps.length) {
-            firebase.initializeApp(config);
-        }
         return(
             <Layout>
                 <Header as='h1'>Home</Header>

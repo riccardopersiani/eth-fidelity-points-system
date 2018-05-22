@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Message, Header } from 'semantic-ui-react';
-import Layout from '../components/Layout';
-import TransferTokensForm from '../components/TransferTokensForm';
+import { Header } from 'semantic-ui-react';
+import Layout from '../components/template/Layout';
 import { Link, Router } from '../routes';
-import ShopAskPaymentForm from '../components/ShopAskPaymentForm';
+import ShopAskPaymentForm from '../components/shop/ShopAskPaymentForm';
 
 
 class AskPaymentPage extends Component {
@@ -21,7 +20,6 @@ class AskPaymentPage extends Component {
                 <br />
                 <ShopAskPaymentForm />
             </Layout>
-
         );
     }
 }

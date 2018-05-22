@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
 import { } from "semantic-ui-react";
-import Layout from "../../components/Layout";
-import UserRegistrationForm from "../../components/UserRegistrationForm";
-
-const options = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
-]
+import Layout from "../../components/template/Layout";
+import UserRegistrationForm from "../../components/user/UserRegistrationForm";
 
 class SignUpUserPage extends Component {
-  state = {};
-
   render() {
-
-    const { value } = this.state
-
     return(
       <Layout>
         <h1>Sign Up for User</h1>

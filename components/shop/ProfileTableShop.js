@@ -16,7 +16,8 @@ class ProfileTableShop extends Component {
     username: '',
     email: '',
     ethereum: '',
-    ibanCode: '',
+    bankId: '',
+    accountId: '',
     approved: true
   };
 
@@ -40,7 +41,8 @@ class ProfileTableShop extends Component {
           var email = snapshot.child("email").val();
           var ethereum = snapshot.child("ethereum").val();
           var username = snapshot.child("username").val();
-          var ibanCode = snapshot.child("ibanCode").val();
+          var bankId = snapshot.child("bankId").val();
+          var accountId = snapshot.child("accountId").val();
           var approved = snapshot.child("approved").val();
 
           // Saving in state vars the fetched data
@@ -57,7 +59,8 @@ class ProfileTableShop extends Component {
             email,
             zipcode,
             shopAddress,
-            ibanCode,
+            bankId,
+            accountId,
             approved
           });
         });
@@ -128,8 +131,13 @@ class ProfileTableShop extends Component {
           </Table.Row>
 
           <Table.Row>
-            <Table.Cell>Iban Code</Table.Cell>
-            <Table.Cell>{this.state.ibanCode}</Table.Cell>
+            <Table.Cell>Bank Id</Table.Cell>
+            <Table.Cell>{this.state.bankId}</Table.Cell>
+          </Table.Row>
+
+          <Table.Row>
+            <Table.Cell>Account Id</Table.Cell>
+            <Table.Cell>{this.state.accountId}</Table.Cell>
           </Table.Row>
 
           <Table.Row>

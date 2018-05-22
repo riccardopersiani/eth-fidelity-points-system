@@ -1,26 +1,29 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Message, Select, Radio, TextArea, Checkbox } from "semantic-ui-react";
-import { Router } from "../routes";
+import { Router } from "../../routes";
 import * as firebase from "firebase";
-import { countryOptions, options } from "../others/common";
+import { countryOptions, options } from "../../others/common";
 
-class UserRegistrationForm extends Component {
+class ShopRegistrationForm extends Component {
   state = {
-    firstName: "",
-    lastName: "",
+    shopName: "",
+    ownerFirstName: "",
     country: "",
     gender: "",
     phone: "",
     email: "",
     city: "",
-    address: "",
+    shopAddress: "",
     zipCode: "",
     ethereum: "",
     username: "",
     password: "",
     confirmPassword: "",
-    mail_validated: false,
-    errorMessage: '',
+    bankId: "",
+    accountId: "",
+    ownerLastName: "",
+    errorMessage: "",
+    approved: false,
   };
 
   // Functions for handling changes in dropdown fields
@@ -57,73 +60,84 @@ class UserRegistrationForm extends Component {
     return isError;
   };
 
-  // Submit the user request
+  // Submit the shop request
   onSubmit = async event => {
     event.preventDefault();
     var self = this;
     // Perform the form validation
-    //const err = this.validate();
-    const err = false;
+    const err = this.validate();
     if (!err) {
-      // Create a new user with username and password and log in instantly
-      console.log("Create a new user with email and password");
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then((response) => {
-          console.log("response in then: ", response)
-
-          var user = firebase.auth().currentUser;
-          // Send email verification to the user after registering him with emailVerified = false.
-          user.sendEmailVerification()
+      // Create a new shop with username and password and log in instantly
+      console.log("Create a new SHOP with email and password");
+      firebase.auth().createUserWithEmailAndPassword(self.state.email, self.state.password)
+        .then(response => console.log("response in then: ", response))
+        .catch(e => console.log("Shop Creaton failed:", e.message)) //TODO
+        .finally(() => {
+          var shop = firebase.auth().currentUser;
+          console.log("SHOP: ",shop);
+          // Send email verification to the shop after registering him with emailVerified = false.
+          shop.sendEmailVerification()
             .then(function() {
-              console.log("ADDING USER", user);
-              console.log("ADDING USER ID", user.uid);
-              // If email is sent, save the user in the db.
-              firebase.app().database().ref("users/" + user.uid)
+              alert("Email Verification for Shop Sent!");
+              firebase.app().database().ref("shops/" + shop.uid)
                 .set({
-                  firstname: self.state.firstName,
-                  lastname: self.state.lastName,
+                  shopName: self.state.shopName,
+                  ownerFirstName: self.state.ownerFirstName,
+                  ownerLastName: self.state.ownerLastName,
                   gender: self.state.gender,
                   country: self.state.country,
                   city: self.state.city,
+                  phone: self.state.phone,
                   email: self.state.email,
                   zipcode: self.state.zipCode,
-                  address: self.state.address,
+                  shopAddress: self.state.shopAddress,
+                  bankId: self.state.bankId,
+                  accountId: self.state.accountId,
                   ethereum: self.state.ethereum,
-                  username: self.state.username
+                  username: self.state.username,
+                  approved: false,
                 })
-                .then(() => alert("Email Verification Sent!"))
                 .catch(error => {
                   self.setState({ errorMessage: error.message });
                 });
             })
             .catch(function(error) {
+              alert("Error in sending email verification");
               self.setState({ errorMessage: error.message });
-            })
-        })
-        .catch(e => console.log("User Creaton failed:", e.message));
+            });
+        });
       // Redirect to home
       //window.location.replace("http://localhost:3000/index");
     }
   };
 
   render() {
-
     return (
       <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="First name"
-            placeholder="First name"
-            onChange={event => this.setState({ firstName: event.target.value })}
-            value={this.state.firstName}
+            label="Shop name"
+            placeholder="Shop name"
+            onChange={event => this.setState({ shopName: event.target.value })}
+            value={this.state.shopName}
+            required
           />
           <Form.Field
             control={Input}
-            label="Last name"
-            placeholder="Last name"
-            onChange={event => this.setState({ lastName: event.target.value })}
-            value={this.state.lastName}
+            label="Owner first name"
+            placeholder="Owner first name"
+            onChange={event => this.setState({ ownerFirstName: event.target.value })}
+            value={this.state.ownerFirstName}
+            required
+          />
+          <Form.Field
+            control={Input}
+            label="Owner last name"
+            placeholder="Owner last name"
+            onChange={event => this.setState({ ownerLastName: event.target.value })}
+            value={this.state.ownerLastName}
+            required
           />
         </Form.Group>
 
@@ -135,6 +149,7 @@ class UserRegistrationForm extends Component {
             placeholder="Country"
             onChange={this.handleChangeCountry}
             value={this.state.country}
+            required
           />
           <Form.Field
             control={Select}
@@ -143,6 +158,7 @@ class UserRegistrationForm extends Component {
             placeholder="Gender"
             onChange={this.handleChangeGender}
             value={this.state.gender}
+            required
           />
         </Form.Group>
 
@@ -154,6 +170,7 @@ class UserRegistrationForm extends Component {
             type="number"
             onChange={event => this.setState({ phone: event.target.value })}
             value={this.state.phone}
+            required
           />
           <Form.Field
             control={Input}
@@ -161,6 +178,7 @@ class UserRegistrationForm extends Component {
             placeholder="Email"
             onChange={event => this.setState({ email: event.target.value })}
             value={this.state.email}
+            required
           />
         </Form.Group>
 
@@ -171,6 +189,7 @@ class UserRegistrationForm extends Component {
             placeholder="City"
             onChange={event => this.setState({ city: event.target.value })}
             value={this.state.city}
+            required
           />
           <Form.Field
             control={Input}
@@ -179,13 +198,15 @@ class UserRegistrationForm extends Component {
             type="number"
             onChange={event => this.setState({ zipCode: event.target.value })}
             value={this.state.zipCode}
+            required
           />
           <Form.Field
             control={Input}
-            label="Address"
-            placeholder="Address"
-            onChange={event => this.setState({ address: event.target.value })}
-            value={this.state.address}
+            label="Shop address"
+            placeholder="Shop address"
+            onChange={event => this.setState({ shopAddress: event.target.value })}
+            value={this.state.shopAddress}
+            required
           />
         </Form.Group>
 
@@ -196,6 +217,7 @@ class UserRegistrationForm extends Component {
             placeholder="Username"
             onChange={event => this.setState({ username: event.target.value })}
             value={this.state.username}
+            required
           />
           <Form.Field
             control={Input}
@@ -204,16 +226,16 @@ class UserRegistrationForm extends Component {
             onChange={event => this.setState({ password: event.target.value })}
             value={this.state.password}
             type="password"
+            required
           />
           <Form.Field
             control={Input}
             label="Confirm Password"
             placeholder="Confirm Password"
-            onChange={event =>
-              this.setState({ confirmPassword: event.target.value })
-            }
+            onChange={event => this.setState({ confirmPassword: event.target.value })}
             value={this.state.confirmPassword}
             type="password"
+            required
           />
         </Form.Group>
 
@@ -223,6 +245,26 @@ class UserRegistrationForm extends Component {
           placeholder="Ethereum Account"
           onChange={event => this.setState({ ethereum: event.target.value })}
           value={this.state.ethereum}
+          required
+        />
+        psd201-bank-y--uk
+        <Form.Field
+          control={Input}
+          label="Bank Id"
+          placeholder="Bank Id"
+          onChange={event => this.setState({ bankId: event.target.value })}
+          value={this.state.bankId}
+          required
+        />
+        45355323453
+        <Form.Field
+          control={Input}
+          label="Account Id"
+          placeholder="Account Id"
+          onChange={event => this.setState({ accountId: event.target.value })}
+          value={this.state.accountId}
+          type="number"
+          required
         />
 
         <Form.Field
@@ -236,4 +278,4 @@ class UserRegistrationForm extends Component {
   }
 }
 
-export default UserRegistrationForm;
+export default ShopRegistrationForm;

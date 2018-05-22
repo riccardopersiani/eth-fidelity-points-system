@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Header } from "semantic-ui-react";
-import Layout from "../components/Layout";
+import Layout from "../components/template/Layout";
 import UserOrderStatusTable from "../components/user/UserOrderStatusTable";
 import { Link, Router } from "../routes";
 

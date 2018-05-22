@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Layout from "../../components/Layout";
-import ProfileTable from "../../components/ProfileTableShop";
+import Layout from "../../components/template/Layout";
+import ProfileTable from "../../components/shop/ProfileTableShop";
 
 class ProfileShopPage extends Component {
   state = {};

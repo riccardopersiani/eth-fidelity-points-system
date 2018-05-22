@@ -68,7 +68,7 @@ contract FidelityPoints is IERC20, Owned {
     // Overlay of the Safemath library on uint256 datatype
     using SafeMath for uint256;
 
-    // Restrinct the usage of a function to a shop
+    // Restrinct the usage of a function to a user
     modifier onlyUser {
         require(!containsShop(msg.sender));
         _;

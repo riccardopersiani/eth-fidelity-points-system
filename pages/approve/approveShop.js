@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { Link, Router } from '../../routes';
-import Layout from '../../components/Layout';
-import ShopRequestTable from '../../components/ShopRequestTable';
+import Layout from '../../components/template/Layout';
+import ShopRequestTable from '../../components/admin/ShopRequestTable';
 
 class ApproveShopPage extends Component {
 

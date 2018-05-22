@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Card } from 'semantic-ui-react';
-import Layout from '../components/Layout';
+import Layout from "../components/template/Layout";
 import fidelityPoints from '../ethereum/fido';
 import { Link } from '../routes';
 

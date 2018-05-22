@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Layout from "../../components/Layout";
-import LoginForm from "../../components/LoginForm";
+import Layout from "../../components/template/Layout";
+import LoginForm from "../../components/auth/LoginForm";
 
 class LoginPage extends Component {
   state = {};

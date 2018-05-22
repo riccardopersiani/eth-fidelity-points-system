@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Message, Select } from "semantic-ui-react";
-import { Router } from "../routes";
+import { Router } from "../../routes";
 import * as firebase from "firebase";
-import { paymentOptions } from "../others/common";
-import fidelityPoints from "../ethereum/fido";
-import web3 from "../ethereum/web3";
-import guid from "../components/utils/guidGenerator"
+import { paymentOptions } from "../../others/common";
+import fidelityPoints from "../../ethereum/fido";
+import web3 from "../../ethereum/web3";
+import guid from "../../components/utils/guidGenerator"
 
 class ShopAskPaymentForm extends Component {
   state = {

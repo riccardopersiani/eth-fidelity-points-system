@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Message } from 'semantic-ui-react';
-import fidelityPoints from '../ethereum/fido';
-import web3 from '../ethereum/web3';
-import { Router } from '../routes';
+import fidelityPoints from '../../ethereum/fido';
+import web3 from '../../ethereum/web3';
+import { Router } from '../../routes';
 
 
 class CreateTokensForm extends Component {

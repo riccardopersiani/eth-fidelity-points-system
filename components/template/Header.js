@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Divider, Dropdown, Grid, Header, Image, List, Menu, Segment, Button } from "semantic-ui-react";
-import { Link } from "../routes";
+import { Link } from "../../routes";
 import * as firebase from "firebase";
 import Head from "next/head";
 import Favicon from "react-favicon";
@@ -163,8 +163,8 @@ function AdminLogged() {
   var user = firebase.auth().currentUser;
   return (
     <Menu.Menu position="right">
-      <Menu.Item name="new">
-        <Link route="/new">
+      <Menu.Item name="createTokens">
+        <Link route="/createTokens">
           <a>Token Generation</a>
         </Link>
       </Menu.Item>

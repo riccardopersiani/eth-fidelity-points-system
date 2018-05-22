@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Input, Message, Header } from 'semantic-ui-react';
-import Layout from '../components/Layout';
-import CreateTokensForm from '../components/CreateTokensForm';
-import AddNewShopForm from '../components/AddNewShopForm';
+import Layout from '../components/template/Layout';
+import CreateTokensForm from '../components/admin/CreateTokensForm';
 import { Link, Router } from '../routes';
 import fidelityPoints from '../ethereum/fido';
 
@@ -13,8 +12,8 @@ class CreateTokensNew extends Component {
         const address = await fidelityPoints.options.address;
         return {
             address: address,
-            rate: summary[7],
-            owner: summary[3]
+            rate: summary[5],
+            owner: summary[1]
         };
     }
 
