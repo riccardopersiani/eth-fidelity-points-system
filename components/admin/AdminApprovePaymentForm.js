@@ -6,7 +6,6 @@ import EthereumRequestRow from "./EthereumRequestRow";
 import Psd2RequestRow from "./Psd2RequestRow";
 
 class AdminApprovePaymentForm extends Component {
-
   state = {
     loadingRenderFirst: true,
     errorMessage: "",

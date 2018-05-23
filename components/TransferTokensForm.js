@@ -8,15 +8,15 @@ class TransferTokenForm extends Component {
     state = {
         value: '',
         receiver: '',
-        errorMessage: '',
-        okMessage: '',
+        errMsg: '',
+        okMsg: '',
         loading: false
     };
 
     onSubmit = async event => {
         event.preventDefault();
         const { value, receiver } = this.state;
-        this.setState({ loading: true, errorMessage: false, okMessage: false });
+        this.setState({ loading: true, errMsg: false, okMsg: false });
         try{
             const accounts = await web3.eth.getAccounts();
             await fidelityPoints.methods.transfer(receiver,value)
@@ -24,17 +24,16 @@ class TransferTokenForm extends Component {
                 from: accounts[0],
                 gas: '4500000'
             });
-            this.setState({ okMessage: true, errorMessage: false });
+            this.setState({ loading: false, okMsg: true, value: '' });
         } catch (error) {
             var trimmedString = error.message.substring(0, 90);
-            this.setState({ okMessage: false, errorMessage: trimmedString });
+            this.setState({ loading: false, errMsg: trimmedString, value: '' });
         }
-        this.setState({ loading: false, value: '' });
     }
 
     render() {
         return (
-            <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading} success={!!this.state.okMessage}>
+            <Form onSubmit={this.onSubmit} error={!!this.state.errMsg} loading={this.state.loading} success={!!this.state.okMsg}>
                 <Form.Field>
                     <label>Token amount to send</label>
                     <Input
@@ -53,11 +52,9 @@ class TransferTokenForm extends Component {
                         labelPosition="right"
                     />
                 </Form.Field>
-                <Message error header="Oops!" content={this.state.errorMessage} />
+                <Message error header="Oops!" content={this.state.errMsg} />
                 <Message success header="Ok!" content="Points transfer completed and stored on the blockchain" />
-                <Button primary>
-                    Transfer
-                </Button>
+                <Button primary>Transfer</Button>
             </Form>
         );
     }

@@ -8,42 +8,34 @@ import { Router } from '../../routes';
 class CreateTokensForm extends Component {
     state = {
         value: '',
-        errorMessage: '',
-        okMessage: '',
-        tokensAmount: '',
+        errMsg: '',
+        okMsg: '',
+        tokens: '',
         loading: false,
     }
 
     onSubmit = async event => {
         event.preventDefault();
-
-        this.setState({ loading: true, errorMessage: false, okMessage: false });
-
+        this.setState({ loading: true, errMsg: false, okMsg: false });
         try {
             const accounts = await web3.eth.getAccounts();
-            console.log("value: ",this.state.value);
             const tokens = this.state.value * 1000000000000000000;
-            console.log("tokens: ",tokens);
-            console.log("web3.utils.toWei(this.state.value, 'ether'): ",web3.utils.toWei(this.state.value, 'ether'));
-            web3.utils.toWei(this.state.value, 'ether')
             await fidelityPoints.methods.createTokens()
             .send({
                 from: accounts[0],
                 value: web3.utils.toWei(this.state.value, 'ether')
             });
-            console.log("value: " + this.state.value);
-            this.setState({ tokensAmount: tokens })
-
+            this.setState({ loading: false, okMsg: true, tokens })
         } catch (err) {
             var trimmedString = err.message.substring(0, 101);
-            this.setState({ errorMessage: trimmedString });
+            this.setState({ loading: false, errMsg: trimmedString });
         }
-        this.setState({ loading: false, value: ''});
+        this.setState({ value: ''});
     }
 
     render() {
         return (
-            <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading} success={!!this.state.okMessage}>
+            <Form onSubmit={this.onSubmit} error={!!this.state.errMsg} loading={this.state.loading} success={!!this.state.okMsg}>
                 <Form.Field>
                     <label>Amount to change in tokens</label>
                     <Input
@@ -53,11 +45,9 @@ class CreateTokensForm extends Component {
                         labelPosition="right"
                     />
                 </Form.Field>
-                <Message error header="Oops!" content={this.state.errorMessage} />
-                <Message success header="Ok!" content={`Successfull creation of ${this.state.tokensAmount} FIDO`} />
-                <Button primary>
-                    Create
-                </Button>
+                <Message error header="Oops!" content={this.state.errMsg} />
+                <Message success header="Ok!" content={`Successfull creation of ${this.state.tokens} FIDO`} />
+                <Button primary>Create</Button>
             </Form>
         );
     }
