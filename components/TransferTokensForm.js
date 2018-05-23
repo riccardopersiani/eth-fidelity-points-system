@@ -15,28 +15,21 @@ class TransferTokenForm extends Component {
 
     onSubmit = async event => {
         event.preventDefault();
-        console.log("receiver: " + receiver);
-
         const { value, receiver } = this.state;
-
-        this.setState({ loading: true });
-
+        this.setState({ loading: true, errorMessage: false, okMessage: false });
         try{
             const accounts = await web3.eth.getAccounts();
-            console.log("receiver: " + receiver);
-            console.log("value: " + value);
-            await fidelityPoints.methods.transfer(
-                receiver,
-                value
-            ).send({
+            await fidelityPoints.methods.transfer(receiver,value)
+            .send({
                 from: accounts[0],
-                gas: '1000000'
+                gas: '4500000'
             });
-        } catch (err) {
-            var trimmedString = err.message.substring(0, 90);
-            this.setState({ errorMessage: trimmedString });
+            this.setState({ okMessage: true, errorMessage: false });
+        } catch (error) {
+            var trimmedString = error.message.substring(0, 90);
+            this.setState({ okMessage: false, errorMessage: trimmedString });
         }
-        this.setState({ loading: false, value: '', okMessage: true });
+        this.setState({ loading: false, value: '' });
     }
 
     render() {

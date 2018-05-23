@@ -241,13 +241,13 @@ app.post('/createTransactionRequest', urlencodedParser, function(req, res){
                 var options = {
                     "title": "Transaction",
                     "error": error,
-                    "postUrl" : postUrl,
+                    "postUrl": postUrl,
                     "fromBankId": fromBankId,
                     "fromAccountId": fromAccountId,
                     "toBankId": toBankId,
-                    "toAccountId" : toAccountId,
-                    "currency" : currency,
-                    "transactionRequestType" : transactionRequestType,
+                    "toAccountId": toAccountId,
+                    "currency": currency,
+                    "transactionRequestType": transactionRequestType,
                     "details": details,
                     "data": data
                 };

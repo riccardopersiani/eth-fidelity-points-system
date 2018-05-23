@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Container, Header } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import HeaderTop from "./Header";
 import Footer from "./Footer";
-import firebase from "firebase";
 
 class Layout extends Component {
   render() {

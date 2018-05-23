@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Message, Select, Radio, TextArea, Checkbox } from "semantic-ui-react";
+import { Form, Input, Button, Message, Select, Checkbox } from "semantic-ui-react";
 import { Router } from "../../routes";
 import * as firebase from "firebase";
 import { countryOptions, options } from "../../others/common";
@@ -19,7 +19,6 @@ class UserRegistrationForm extends Component {
     username: "",
     password: "",
     confirmPassword: "",
-    mail_validated: false,
     errorMessage: '',
   };
 
@@ -62,8 +61,7 @@ class UserRegistrationForm extends Component {
     event.preventDefault();
     var self = this;
     // Perform the form validation
-    //const err = this.validate();
-    const err = false;
+    const err = this.validate();
     if (!err) {
       // Create a new user with username and password and log in instantly
       console.log("Create a new user with email and password");
@@ -102,7 +100,7 @@ class UserRegistrationForm extends Component {
         })
         .catch(e => console.log("User Creaton failed:", e.message));
       // Redirect to home
-      //window.location.replace("http://localhost:3000/index");
+      window.location.replace("http://localhost:3000/index");
     }
   };
 

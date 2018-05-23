@@ -10,28 +10,29 @@ class CreateTokensForm extends Component {
         value: '',
         errorMessage: '',
         okMessage: '',
+        tokensAmount: '',
         loading: false,
     }
 
     onSubmit = async event => {
         event.preventDefault();
 
-        this.setState({ loading: true });
+        this.setState({ loading: true, errorMessage: false, okMessage: false });
 
         try {
-            console.log("value: " + this.state.value);
             const accounts = await web3.eth.getAccounts();
-            console.log("value: " + this.state.value);
-            const tokens = this.state.value * 1000000;
-            console.log("tokens: " + tokens);
-            await fidelityPoints.methods
-            .createTokens()
+            console.log("value: ",this.state.value);
+            const tokens = this.state.value * 1000000000000000000;
+            console.log("tokens: ",tokens);
+            console.log("web3.utils.toWei(this.state.value, 'ether'): ",web3.utils.toWei(this.state.value, 'ether'));
+            web3.utils.toWei(this.state.value, 'ether')
+            await fidelityPoints.methods.createTokens()
             .send({
                 from: accounts[0],
                 value: web3.utils.toWei(this.state.value, 'ether')
             });
             console.log("value: " + this.state.value);
-            this.setState({ okMessage: tokens })
+            this.setState({ tokensAmount: tokens })
 
         } catch (err) {
             var trimmedString = err.message.substring(0, 101);
@@ -42,7 +43,7 @@ class CreateTokensForm extends Component {
 
     render() {
         return (
-            <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} success={!!this.state.okMessage}>
+            <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading} success={!!this.state.okMessage}>
                 <Form.Field>
                     <label>Amount to change in tokens</label>
                     <Input
@@ -53,8 +54,8 @@ class CreateTokensForm extends Component {
                     />
                 </Form.Field>
                 <Message error header="Oops!" content={this.state.errorMessage} />
-                <Message success header="Ok!" content={`Successfull creation of ${this.state.okMessage} FIDO`} />
-                <Button primary loading={this.state.loading}>
+                <Message success header="Ok!" content={`Successfull creation of ${this.state.tokensAmount} FIDO`} />
+                <Button primary>
                     Create
                 </Button>
             </Form>

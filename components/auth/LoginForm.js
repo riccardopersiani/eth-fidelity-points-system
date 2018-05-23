@@ -5,16 +5,16 @@ import * as firebase from "firebase";
 
 class LoginForm extends Component {
   state = {
-    email: "",
-    password: "",
-    errorMessage: ""
+    email: '',
+    password: '',
+    errorMessage: '',
+    loading: ''
   };
 
   onSubmit = async event => {
     event.preventDefault();
-
     var self = this;
-
+    this.setState({ loading: true });
     // SingIn on firebase with username and password inserted in the form
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
@@ -23,19 +23,19 @@ class LoginForm extends Component {
           if (user) {
             window.location.replace("http://localhost:3000/index");
           } else {
-            // TODO Remove?
             console.log("No user logged");
           }
         });
       })
       .catch(function(error) {
-        self.setState({ errorMessage: error.message });
+        var trimmedString = error.message.substring(0, 90);
+        self.setState({ loading: false, errorMessage: trimmedString });
       });
   };
 
   render() {
     return (
-      <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+      <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading}>
         <Form.Field
           control={Input}
           label="Email"

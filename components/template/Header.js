@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Divider, Dropdown, Grid, Header, Image, List, Menu, Segment, Button } from "semantic-ui-react";
+import { Container, Dropdown, Header, Menu } from "semantic-ui-react";
 import { Link } from "../../routes";
 import * as firebase from "firebase";
 import Head from "next/head";
@@ -13,39 +13,24 @@ function onClickLogout() {
   // Call firebase for signout
   firebase.auth().signOut()
     .then(
-      function() {
-        // TODO Maybe redirect somewhere?
-        console.log("SIGN OUT COMPLETE");
-      }
-    )
-    .catch(error => {
-      // TODO
-      console.log("Sign out failed with message: ", error.message);
-    })
-    .finally(() => {
-      console.log("SIGN OUT BEFORE RELOAD");
-      window.location.reload();
-      console.log("SIGN OUT AFTER RELOAD");
-    });
+      // Redirect to home after logout
+      window.location.replace("http://localhost:3000/index")
+    );
 }
 
 function onClickRedirectProfile() {
-  //TODO redirect
   window.location.replace("http://localhost:3000/auth/profile");
 }
 
 function onClickRedirectProfileShop() {
-  //TODO redirect
   window.location.replace("http://localhost:3000/auth/profileShop");
 }
 
 function onClickRedirectUserSignup() {
-  //TODO redirect
   window.location.replace("http://localhost:3000/auth/signUpUser");
 }
 
 function onClickShopRegistration() {
-  //TODO redirect
   window.location.replace("http://localhost:3000/auth/signUpShop");
 }
 
@@ -58,19 +43,16 @@ function UserLogged() {
           <a>Transfer</a>
         </Link>
       </Menu.Item>
-
       <Menu.Item key="c" name="shop">
         <Link route="/shop">
           <a>Shop</a>
         </Link>
       </Menu.Item>
-
       <Menu.Item key="d" name="orderStatus">
         <Link route="/userOrderStatus">
           <a>Order Status</a>
         </Link>
       </Menu.Item>
-
       <Dropdown item text="Welcome User">
         <Dropdown.Menu>
           <Dropdown.Header>
@@ -97,25 +79,21 @@ function ShopLogged() {
           <a>Transfer</a>
         </Link>
       </Menu.Item>
-
       <Menu.Item key="s" name="askPayment">
         <Link route="/askPayment">
           <a>Ask Payment</a>
         </Link>
       </Menu.Item>
-
       <Menu.Item key="t" name="requestStatus">
         <Link route="/shopRequestStatus">
           <a>Request Status</a>
         </Link>
       </Menu.Item>
-
       <Menu.Item key="u" name="shipOrder">
         <Link route="/shopShipOrder">
           <a>Complete Order</a>
         </Link>
       </Menu.Item>
-
       <Dropdown item text="Welcome Shop">
         <Dropdown.Menu>
           <Dropdown.Header>
@@ -141,7 +119,6 @@ function NoLogged() {
           <a>Sign In</a>
         </Link>
       </Menu.Item>
-
           <Dropdown text="Sign Up" item>
             <Dropdown.Menu>
               <Dropdown.Header>
@@ -233,11 +210,9 @@ class HeaderTop extends Component {
           });
         }
         else {
-
           // Check if the user email is present in the shop section of the db.
           firebase.app().database().ref("shops").orderByChild("email").equalTo(user.email).once("value", snapshot => {
               const userData = snapshot.val();
-
               // Check if it is a SHOP.
               if (userData) {
                 console.log("Shop logged in!");
@@ -247,7 +222,6 @@ class HeaderTop extends Component {
                   isShopLoggedIn: true,
                   isNoneLoggedIn: false
                 });
-
               // Check if it is a USER.
               } else {
                 console.log("User logged in");
@@ -260,7 +234,7 @@ class HeaderTop extends Component {
               }
           });
         }
-      // The variable user=null so NONE is logged in.
+      // The variable user=null, so NONE is logged in.
       } else {
         console.log("None logged in");
         this.setState({
@@ -304,13 +278,11 @@ class HeaderTop extends Component {
             <Menu.Item as="a" header>
               Fidelity Points
             </Menu.Item>
-
             <Menu.Item name="home">
               <Link route="/index">
                 <a>Home</a>
               </Link>
             </Menu.Item>
-
             <Menu.Item name="statistics">
               <Link route="/stats">
                 <a>Statistics</a>

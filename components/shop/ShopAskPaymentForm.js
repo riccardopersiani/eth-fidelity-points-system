@@ -41,7 +41,7 @@ class ShopAskPaymentForm extends Component {
         await fidelityPoints.methods.createEthereumPaymentRequest(self.state.value, self.state.note, shop.uid)
         .send({
           from: accounts[0],
-          gas: '1000000'
+          gas: '4500000'
         });
         console.log("okMessafe prima 2: ", self.state.okMessage);
         this.setState({ okMessage: self.state.method });
@@ -69,7 +69,8 @@ class ShopAskPaymentForm extends Component {
                       method: self.state.method,
                       note: self.state.note,
                       timestamp: Math.floor(Date.now()),
-                      completed: false
+                      completed: false,
+                      rejected: false
                     });
       }
     } catch (err) {

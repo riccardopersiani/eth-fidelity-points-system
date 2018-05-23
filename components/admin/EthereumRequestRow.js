@@ -5,6 +5,18 @@ import fidelityPoints from "../../ethereum/fido";
 
 class EthereumRequestRow extends Component {
 
+    onReject = async event => {
+        event.preventDefault();
+        event.persist();
+
+        console.log("Parameter passed in event => Eth value: ", event.target.value)
+        const accounts = await web3.eth.getAccounts();
+        await fidelityPoints.methods.rejectRequestEthereum(this.props.id).send({
+            from: accounts[0],
+            gas: '4500000'
+        });
+    };
+
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
@@ -23,6 +35,13 @@ class EthereumRequestRow extends Component {
 
         return (
             <Row disabled={request.completed} positive={!request.completed}>
+                <Cell>
+                    {request.rejected ? null : (
+                        <Button color="red" basic onClick={this.onReject}>
+                            Reject
+                        </Button>
+                    )}
+                </Cell>
                 <Cell>
                     {request.complete ? null : (
                         <Button color="teal" basic onClick={this.onFinalize} value={request.value}>
