@@ -351,9 +351,9 @@ contract FidelityPoints is IERC20, Owned {
             // Check if the amount trasfered is greather than 0
             require(_value > 0);
             // Prevent transfer to 0x0 address. Use burn() instead
-            require(owner != 0x0);
+            require(_receiver != 0x0);
             // Check for overflows
-            require(balances[owner] + _value > balances[owner]);
+            require(balances[_receiver] + _value > balances[_receiver]);
             // Check for underflows
             require(balances[msg.sender] - _value < balances[msg.sender]);
             // Create the new BuyingRequest
@@ -372,15 +372,15 @@ contract FidelityPoints is IERC20, Owned {
             // Value convertion
             _value = _value * 10 ** uint256(decimals);
             // Save for the future assertion
-            uint previousBalances = balances[msg.sender].add(balances[owner]);
+            uint previousBalances = balances[msg.sender].add(balances[_receiver]);
             // Subtract the token amount from the sender
             balances[msg.sender] = balances[msg.sender].sub(_value);
             // Add the token amount to the recipient
-            balances[owner] = balances[owner].add(_value);
+            balances[_receiver] = balances[_receiver].add(_value);
             // Emit the Transfer event
-            emit Transfer(msg.sender, owner, _value);
+            emit Transfer(msg.sender, _receiver, _value);
             // Asserts are used to use static analysis to find bugs in code. They should never fail
-            assert(balances[msg.sender].add(balances[owner]) == previousBalances);
+            assert(balances[msg.sender].add(balances[_receiver]) == previousBalances);
             return true;
         }
 
