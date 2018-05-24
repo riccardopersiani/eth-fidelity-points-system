@@ -346,17 +346,19 @@ contract FidelityPoints is IERC20, Owned {
     ******************************************************************************/
     function createBuyingRequest(string _product, string _shopEmail, address _receiver, uint _value, string _userId)
         public onlyUser returns (bool) {
-            // Check if the sender has enough
+            // Check if the sender has enough.
             require(balances[msg.sender] >= _value);
-            // Check if the amount trasfered is greather than 0
+            // Check if the amount trasfered is greather than 0.
             require(_value > 0);
-            // Prevent transfer to 0x0 address. Use burn() instead
+            // Prevent transfer to 0x0 address. Use burn() instead.
             require(_receiver != 0x0);
-            // Check for overflows
+            // Check for overflows.
             require(balances[_receiver] + _value > balances[_receiver]);
-            // Check for underflows
+            // Check for underflows.
             require(balances[msg.sender] - _value < balances[msg.sender]);
-            // Create the new BuyingRequest
+            // Receiver should be an official shop.
+            require(containsShop(_receiver));
+            // Create the new BuyingRequest.
             BuyingRequest memory buyingRequest = BuyingRequest({
                 user: msg.sender,
                 shop: _receiver,
