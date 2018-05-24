@@ -6,20 +6,20 @@ import { countryOptions, options } from "../../others/common";
 
 class UserRegistrationForm extends Component {
   state = {
-    firstName: "",
-    lastName: "",
-    country: "",
-    gender: "",
-    phone: "",
-    email: "",
-    city: "",
-    address: "",
-    zipCode: "",
-    ethereum: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    errorMessage: '',
+    firstName: '',
+    lastName: '',
+    country: '',
+    gender: '',
+    phone: '',
+    email: '',
+    city: '',
+    address: '',
+    zipCode: '',
+    ethereum: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    errMsg: false,
   };
 
   // Functions for handling changes in dropdown fields
@@ -64,17 +64,12 @@ class UserRegistrationForm extends Component {
     const err = this.validate();
     if (!err) {
       // Create a new user with username and password and log in instantly
-      console.log("Create a new user with email and password");
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then((response) => {
-          console.log("response in then: ", response)
-
           var user = firebase.auth().currentUser;
           // Send email verification to the user after registering him with emailVerified = false.
           user.sendEmailVerification()
             .then(function() {
-              console.log("ADDING USER", user);
-              console.log("ADDING USER ID", user.uid);
               // If email is sent, save the user in the db.
               firebase.app().database().ref("users/" + user.uid)
                 .set({
@@ -89,16 +84,13 @@ class UserRegistrationForm extends Component {
                   ethereum: self.state.ethereum,
                   username: self.state.username
                 })
-                .then(() => alert("Email Verification Sent!"))
-                .catch(error => {
-                  self.setState({ errorMessage: error.message });
-                });
-            })
-            .catch(function(error) {
-              self.setState({ errorMessage: error.message });
-            })
+                .then(() => alert("Email Verification Sent!"));
+            });
         })
-        .catch(e => console.log("User Creaton failed:", e.message));
+        .catch((error) => {
+          var trimmedString = err.message.substring(0, 90);
+          this.setState({ errMsg: trimmedString });
+        });
       // Redirect to home
       window.location.replace("http://localhost:3000/index");
     }
@@ -126,7 +118,6 @@ class UserRegistrationForm extends Component {
             required
           />
         </Form.Group>
-
         <Form.Group widths="equal">
           <Form.Field
             control={Select}
@@ -147,7 +138,6 @@ class UserRegistrationForm extends Component {
             required
           />
         </Form.Group>
-
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
@@ -168,7 +158,6 @@ class UserRegistrationForm extends Component {
             required
           />
         </Form.Group>
-
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
@@ -196,7 +185,6 @@ class UserRegistrationForm extends Component {
             required
           />
         </Form.Group>
-
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
@@ -227,7 +215,6 @@ class UserRegistrationForm extends Component {
             required
           />
         </Form.Group>
-
         <Form.Field
           control={Input}
           label="Ethereum Account"
@@ -236,7 +223,6 @@ class UserRegistrationForm extends Component {
           value={this.state.ethereum}
           required
         />
-
         <Form.Field
           control={Checkbox}
           label="I agree to the Terms and Conditions"

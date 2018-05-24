@@ -30,16 +30,6 @@ class ShopIndex extends Component {
         const items = [
             {
                 header:  "Main Shop",
-                meta: owner,
-                description: (
-					<Link route={`/shops/${owner}`}>
-						<a>Enter shop</a>
-					</Link>
-				),
-                style: {overflowWrap: 'break-word'}
-            },
-            {
-                header:  "Clothes Shop",
                 meta: shops[0],
                 description: (
 					<Link route={`/shops/${shops[0]}`}>
@@ -57,49 +47,8 @@ class ShopIndex extends Component {
 					</Link>
 				),
                 style: {overflowWrap: 'break-word'}
-            },
-            {
-                header: "Food and Drink Shop",
-                meta: shops[2],
-                description: (
-					<Link route={`/shops/${shops[2]}`}>
-						<a>Enter shop</a>
-					</Link>
-				),
-                style: {overflowWrap: 'break-word'}
-            },
-            {
-                header: "Restaurants",
-                meta: shops[3],
-                description: (
-					<Link route={`/shops/${shops[3]}`}>
-						<a>Enter shop</a>
-					</Link>
-				),
-                style: {overflowWrap: 'break-word'}
-            },
-            {
-                header: "In mainteinance",
-                meta: shops[4],
-                description: (
-					<Link route={`/shops/${shops[4]}`}>
-						<a>Enter shop</a>
-					</Link>
-				),
-                style: {overflowWrap: 'break-word'}
-            },
-            {
-                header: "Under Contruction",
-                meta: shops[5],
-                description: (
-					<Link route={`/shops/${shops[5]}`}>
-						<a>Enter shop</a>
-					</Link>
-				),
-                style: {overflowWrap: 'break-word'}
             }
         ]
-
         return <Card.Group items={items} />
     }
 

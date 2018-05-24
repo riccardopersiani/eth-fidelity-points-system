@@ -4,16 +4,16 @@ import { Table, Icon } from "semantic-ui-react";
 
 class ProfileTable extends Component {
   state = {
-    firstname: "",
-    lastname: "",
-    address: "",
-    city: "",
-    country: "",
-    zipcode: "",
-    gender: "",
-    username: "",
-    email: "",
-    ethereum: ""
+    firstname: '',
+    lastname: '',
+    address: '',
+    city: '',
+    country: '',
+    zipcode: '',
+    gender: '',
+    username: '',
+    email: '',
+    ethereum: ''
   };
 
   componentDidMount() {
@@ -22,7 +22,6 @@ class ProfileTable extends Component {
       // User is signed in.
       if (user) {
         // If data are not take, take it
-        // TODO maybe remove this check, because of ComponentDidMount()
         if (!self.state.ethereum) {
           var userId = firebase.auth().currentUser.uid;
           var ref = firebase.database().ref("users/" + userId);
@@ -51,9 +50,6 @@ class ProfileTable extends Component {
             });
           });
         }
-        // No user is signed in.
-      } else {
-        console.log("User not logged.");
       }
     });
   }
@@ -66,53 +62,43 @@ class ProfileTable extends Component {
             <Table.HeaderCell colSpan="3">Profile Recap</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-
         <Table.Body>
           <Table.Row>
             <Table.Cell>Username</Table.Cell>
             <Table.Cell>{this.state.username}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell collapsing>Firstname</Table.Cell>
             <Table.Cell>{this.state.firstname}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Lastname</Table.Cell>
             <Table.Cell>{this.state.lastname}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Email</Table.Cell>
             <Table.Cell>{this.state.email}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Ethereum Account</Table.Cell>
             <Table.Cell>{this.state.ethereum}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Address</Table.Cell>
             <Table.Cell>{this.state.address}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>City</Table.Cell>
             <Table.Cell>{this.state.city}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Country</Table.Cell>
             <Table.Cell>{this.state.country}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Zip Code</Table.Cell>
             <Table.Cell>{this.state.zipcode}</Table.Cell>
           </Table.Row>
-
           <Table.Row>
             <Table.Cell>Gender</Table.Cell>
             <Table.Cell>{this.state.gender}</Table.Cell>
@@ -122,4 +108,5 @@ class ProfileTable extends Component {
     );
   }
 }
+
 export default ProfileTable;

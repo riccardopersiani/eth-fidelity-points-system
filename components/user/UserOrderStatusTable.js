@@ -6,15 +6,11 @@ import web3 from "../../ethereum/web3";
 import UserOrderRequestRow from "./UserOrderRequestRow";
 
 class UserOrderStatusTable extends Component {
-
     state = {
-        requestList: [],
-        loadingRenderFirst: true,
-        errorMessage: "",
-        buyingRequestCount: "",
+        buyingRequestCount: '',
+        userId: '',
         buyingRequests: [],
-        loading: false,
-        userId: "",
+        loadingRenderFirst: true
     };
 
     // Getting data when component is mounting
@@ -23,23 +19,16 @@ class UserOrderStatusTable extends Component {
         firebase.auth().onAuthStateChanged(function(user) {
             // User is signed in.
             if (user) {
-                console.log("User detected: ",user);
                 // If data are not take, take it
-                // TODO maybe remove this check, because of ComponentDidMount()
                 if (!self.state.userId) {
                     var userId = '';
-                    console.log("UserId set done!");
                     userId = user.uid;
                     self.setState({ userId });
                 }
-                // No user is signed in.
-            } else {
-                console.log("User not logged.");
             }
         });
+        // Get buying request from the contract
         const buyingRequestCount =  await fidelityPoints.methods.getUserRequestsBuyCount().call();
-        console.log("buyingRequestCount:", buyingRequestCount);
-        // inside I have the list of all different indexes of campaign, try it in terminal
         const buyingRequests =  await Promise.all(
             Array(parseInt(buyingRequestCount))
             .fill()
@@ -47,15 +36,11 @@ class UserOrderStatusTable extends Component {
                 return fidelityPoints.methods.buyingRequests(index).call();
             })
         );
-        console.log("buyingRequests:", buyingRequests);
-
         self.setState({ buyingRequestCount, buyingRequests, loadingRenderFirst: false });
     }
 
     renderRowsUserBuy() {
         var self = this;
-        console.log("buyingRequests:", this.state.buyingRequests);
-        console.log("userId: ", self.state.userId);
         return this.state.buyingRequests.map((request, index) => {
             if(request.userId == self.state.userId){
                 return <UserOrderRequestRow
@@ -68,16 +53,13 @@ class UserOrderStatusTable extends Component {
     }
 
     render() {
-        var listItems;
-        var items;
-        const { id, request, approversCount } = this.props;
         if (this.state.loadingRenderFirst == true) {
             return (
                 <Table celled compact definition size="small">
                     <Table.Header fullWidth>
                         <Table.Row key={"header"}>
                             <Table.HeaderCell>Product</Table.HeaderCell>
-                            <Table.HeaderCell>Shop Name</Table.HeaderCell>
+                            <Table.HeaderCell>Shop Email</Table.HeaderCell>
                             <Table.HeaderCell>Shop Address</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
@@ -98,7 +80,7 @@ class UserOrderStatusTable extends Component {
                     <Table.Header fullWidth>
                         <Table.Row key={"header"}>
                             <Table.HeaderCell>Product</Table.HeaderCell>
-                            <Table.HeaderCell>Shop Name</Table.HeaderCell>
+                            <Table.HeaderCell>Shop Email</Table.HeaderCell>
                             <Table.HeaderCell>Shop Address</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
@@ -121,4 +103,5 @@ class UserOrderStatusTable extends Component {
         }
     }
 }
+
 export default UserOrderStatusTable;

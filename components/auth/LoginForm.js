@@ -8,7 +8,7 @@ class LoginForm extends Component {
     email: '',
     password: '',
     errorMessage: '',
-    loading: ''
+    loading: false
   };
 
   onSubmit = async event => {
