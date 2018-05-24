@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Message, Select, Radio, TextArea, Checkbox } from "semantic-ui-react";
+import { Form, Input, Button, Message, Select, Checkbox } from "semantic-ui-react";
 import { Router } from "../../routes";
 import * as firebase from "firebase";
 import { countryOptions, options } from "../../others/common";

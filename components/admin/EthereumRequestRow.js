@@ -4,10 +4,13 @@ import web3 from '../../ethereum/web3';
 import fidelityPoints from "../../ethereum/fido";
 
 class EthereumRequestRow extends Component {
+    state = {
+        loading: false,
+    };
 
     onReject = async event => {
         event.preventDefault();
-        event.persist();
+        this.setState({ loading: true });
         // Get accounts.
         const accounts = await web3.eth.getAccounts();
         // Reject the ether request performed by the shop.
@@ -15,11 +18,13 @@ class EthereumRequestRow extends Component {
             from: accounts[0],
             gas: '4500000'
         });
+        this.setState({ loading: false });
     };
 
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
+        this.setState({ loading: true });
         // Get accounts.
         const accounts = await web3.eth.getAccounts();
         // Transfer ether in the request to the shop.
@@ -27,30 +32,33 @@ class EthereumRequestRow extends Component {
             from: accounts[0],
             value: event.target.value
         });
+        this.setState({ loading: false });
+
     };
 
     render() {
         const { Cell, Row } = Table;
         const { id, request } = this.props;
         return (
-            <Row disabled={!!request.completed} positive={!!request.completed} negative={!!request.rejected}>
+            <Row disabled={!!request.completed || !!request.rejected } positive={!!request.completed} negative={!!request.rejected}>
                 <Cell>
-                    {request.rejected ? null : (
-                        <Button color="red" basic onClick={this.onReject}>
+                    {(request.completed || request.rejected) ? null : (
+                        <Button disabled={this.state.loading} loading={this.state.loading} color="red" basic onClick={this.onReject}>
                             Reject
                         </Button>
                     )}
                 </Cell>
                 <Cell>
-                    {request.complete ? null : (
-                        <Button color="teal" basic onClick={this.onFinalize} value={request.value}>
+                    {(request.completed || request.rejected) ? null : (
+                        <Button disabled={this.state.loading}
+                                loading={this.state.loading} color="teal" basic value={request.value} onClick={this.onFinalize}>
                             Finalize
                         </Button>
                     )}
                 </Cell>
-                <Cell>{reuqest.shopId}</Cell>
+                <Cell>{request.shopId}</Cell>
                 <Cell>{request.value} FID</Cell>
-                <Cell>{request.method}</Cell>
+                <Cell>Ethereum</Cell>
                 <Cell>{request.shop}</Cell>
                 <Cell>{request.note}</Cell>
             </Row>

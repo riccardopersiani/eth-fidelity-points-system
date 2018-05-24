@@ -8,7 +8,7 @@ class EthereumRequestRowShop extends Component {
         const { Cell, Row } = Table;
         const { id, request, key } = this.props;
         return (
-            <Row negative={!request.completed} positive={request.completed}>
+            <Row negative={!request.completed} positive={!!request.completed}>
                 <Cell>{id}</Cell>
                 <Cell>{request.value} FID</Cell>
                 <Cell>{request.method}</Cell>

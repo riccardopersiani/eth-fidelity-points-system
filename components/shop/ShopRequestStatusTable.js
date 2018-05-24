@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
-import { Button, Checkbox, Icon, Table } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 import fidelityPoints from "../../ethereum/fido";
 import web3 from "../../ethereum/web3";
 import EthereumRequestRowShop from "./EthereumRequestRowShop";
@@ -8,16 +8,14 @@ import Psd2RequestRowShop from "./Psd2RequestRowShop";
 
 class ShopRequestStatusTable extends Component {
     state = {
-        requestList: [],
-        snapshot: [],
-        loadingRenderFirst: true,
-        paymentMethod: "",
-        paymentAmount: "",
-        errorMessage: "",
-        sending: "",
-        ethereumRequestCount: "",
+        paymentMethod: '',
+        paymentAmount: '',
+        errorMessage: '',
+        sending: '',
+        ethereumRequestCount: '',
         ethereumRequests: [],
         psd2Requests: [],
+        loadingRenderFirst: true,
         loading: false
     };
 
@@ -39,9 +37,7 @@ class ShopRequestStatusTable extends Component {
         var self = this;
         this.loadData()
         .then(async (snapshot) => {
-            console.log("snapshot:", snapshot);
             var promise = new Promise((resolve, reject) => {
-                console.log("Nella promise");
                 // Shop id
                 snapshot.forEach(item => {
                     self.state.psd2Requests.push(item);
@@ -60,7 +56,7 @@ class ShopRequestStatusTable extends Component {
                 })
             );
             console.log("ethereumRequests:", ethereumRequests);
-            self.setState({ ethereumRequestCount, ethereumRequests, snapshot, loadingRenderFirst: false });
+            self.setState({ ethereumRequestCount, ethereumRequests, loadingRenderFirst: false });
             return promise;
         })
         .catch(err => {

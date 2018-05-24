@@ -4,7 +4,7 @@ import { Button, Table } from "semantic-ui-react";
 import fidelityPoints from '../../ethereum/fido';
 import web3 from '../../ethereum/web3';
 
-class ShopRequestTable extends Component {
+class AdminApproveShop extends Component {
   state = {
     shopList: [],
     loadingRenderFirst: true,
@@ -112,9 +112,9 @@ class ShopRequestTable extends Component {
             this.state.shopList.map((item, index) => {
               var shop = item.val();
               return (
-                  <Table.Row key={item.key} positive={shop.approved} negative={!shop.approved}>
+                  <Table.Row key={item.key} disabled={!!shop.approved} positive={shop.approved} negative={!shop.approved}>
                     <Table.Cell collapsing>
-                      <Button loading={this.state.loading} onClick={this.onSubmit} id={item.key} value={shop.ethereum} size="small">Approve</Button>
+                      <Button  disabled={!!shop.approved || this.state.loading} loading={this.state.loading} onClick={this.onSubmit} id={item.key} value={shop.ethereum} size="small">Approve</Button>
                     </Table.Cell>
                     <Table.Cell collapsing>{shop.shopName}</Table.Cell>
                     <Table.Cell collapsing>{shop.email}</Table.Cell>
@@ -138,4 +138,4 @@ class ShopRequestTable extends Component {
     }
   }
 }
-export default ShopRequestTable;
+export default AdminApproveShop;

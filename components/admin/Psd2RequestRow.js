@@ -40,7 +40,7 @@ class Psd2RequestRow extends Component {
                 </Cell>
                 <Cell>{request.shopId}</Cell>
                 <Cell>{request.tokenAmount} FID</Cell>
-                <Cell>{request.method}</Cell>
+                <Cell>Euro</Cell>
                 <Cell>{request.shop}</Cell>
                 <Cell>{request.note}</Cell>
             </Row>

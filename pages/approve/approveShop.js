@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { Link, Router } from '../../routes';
 import Layout from '../../components/template/Layout';
-import ShopRequestTable from '../../components/admin/ShopRequestTable';
+import AdminApproveShop from '../../components/admin/AdminApproveShop';
 
 class ApproveShopPage extends Component {
 
@@ -12,7 +12,7 @@ class ApproveShopPage extends Component {
                 <Header as='h1'>Approve Shop page</Header>
                 <br/>
                 <p>Hello admin, here you can approve the shop request to become official.</p>
-                <ShopRequestTable/>
+                <AdminApproveShop/>
             </Layout>
         );
     }

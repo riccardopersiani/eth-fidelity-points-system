@@ -13,9 +13,9 @@ class ShopAskPaymentForm extends Component {
     value: '',
     note: '',
     owner: '',
-    loading: false,
-    errorMessage: '',
-    okMessage: ''
+    errMsg: '',
+    okMsg: '',
+    loading: false
   };
 
   handleChangePaymentMethod = (e, { value }) => this.setState({ method: value });
@@ -24,30 +24,25 @@ class ShopAskPaymentForm extends Component {
     event.preventDefault();
     var self = this;
     try {
-      console.log("method: ", self.state.method);
+      // Asking for an Ethereum payment.
       if(self.state.method == 'eth'){
-        console.log("okMessafe prima 1: ", self.state.okMessage);
-        // Get from the blockchain the summary of information.
+        // Get from the contract the summary of information.
         const summary = await fidelityPoints.methods.getSummary().call();
-        // Get the shop id which is asking for payment.
+        // Get the shop which is asking for payment.
         var shop = firebase.auth().currentUser;
-        // get the shop info from db to get the eth account
-        console.log("guid(): ", guid());
         // Save the owner address in the state variable.
-        this.setState({ owner: summary[3], loading: true, okMessage: '', errorMessage: '' });
-        // Perform the tokens transfer to the owner.
+        this.setState({ owner: summary[3], loading: true, okMsg: false, errMsg: false });
+        // Get the accounts.
         const accounts = await web3.eth.getAccounts();
-        // valore, nota, metodo
+        // Perform the tokens transfer to the owner.
         await fidelityPoints.methods.createEthereumPaymentRequest(self.state.value, self.state.note, shop.uid)
         .send({
           from: accounts[0],
           gas: '4500000'
         });
-        console.log("okMessafe prima 2: ", self.state.okMessage);
-        this.setState({ okMessage: self.state.method });
-        console.log("okMessafe dopo: ", self.state.okMessage);
+        this.setState({ okMsg: true, loading: false });
+      // Asking for a PSD2 payment.
       } else {
-          console.log("okMessafe prima 1: ", self.state.okMessage);
           // Get from the blockchain the summary of information.
           const summary = await fidelityPoints.methods.getSummary().call();
           // Get the shop id which is asking for payment.
@@ -55,36 +50,40 @@ class ShopAskPaymentForm extends Component {
           // get the shop info from db to get the eth account
           console.log("guid(): ", guid());
           // Save the owner address in the state variable.
-          this.setState({ owner: summary[3], loading: true, okMessage: '', errorMessage: '' });
-          // Perform the tokens transfer to the owner.
+          this.setState({ owner: summary[3], loading: true, okMsg: false, errMsg: false });
+          // Get the accounts.
           const accounts = await web3.eth.getAccounts();
-          // valore, nota, metodo
-          // TODO 
-          // INVIARE ANCHE I TOKEN TRAMITE ETHEREUM
+          // Send the token amount and create the request.
+          await fidelityPoints.methods.createEthereumPaymentRequest(self.state.value, self.state.note, shop.uid)
+          .send({
+            from: accounts[0],
+            gas: '4500000'
+          });
           // After the trasfer in the blockchain, register the payment in the db with paymentid = timestamp.
-          firebase.app().database().ref("pending_payments_psd2/" +  guid() )
-                    .set({
-                      shop: shop.uid, // in the blockchain is memorized the eth address, here avoid because we need a query to the database
-                      tokenAmount: self.state.value,
-                      method: self.state.method,
-                      note: self.state.note,
-                      timestamp: Math.floor(Date.now()),
-                      completed: false,
-                      rejected: false
-                    });
+          firebase.app().database().ref("pending_payments_psd2/" +  guid())
+          .set({
+            shop: shop.uid, // in the blockchain is memorized the eth address, here avoid because we need a query to the database
+            tokenAmount: self.state.value,
+            method: self.state.method,
+            note: self.state.note,
+            timestamp: Math.floor(Date.now()),
+            completed: false,
+            rejected: false
+          });
+          this.setState({ okMsg: true, loading: false });
       }
     } catch (err) {
       // Print the first part of error message to the user.
-      var trimmedString = err.message.substring(0, 90);
-      this.setState({ errorMessage: trimmedString });
+      var trimmedString = err.message.substring(0, 150);
+      this.setState({ errMsg: trimmedString, loading: false });
     }
     // Operation completed, reset the input values.
-    this.setState({ loading: false, value: '', note: '' });
+    this.setState({ value: '', note: '' });
   };
 
   render() {
     return (
-      <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading} success={!!this.state.okMessage}>
+      <Form onSubmit={this.onSubmit} error={!!this.state.errMsg} loading={this.state.loading} success={!!this.state.okMsg}>
         <Form.Field required>
           <label>Token amount to send</label>
           <Input
@@ -95,7 +94,6 @@ class ShopAskPaymentForm extends Component {
             required
           />
         </Form.Field>
-
         <Form.Field
           control={Select}
           label="Payment Method"
@@ -105,15 +103,14 @@ class ShopAskPaymentForm extends Component {
           value={this.state.method}
           required
         />
-
         Note
         <Form.TextArea
           onChange={event => this.setState({ note: event.target.value })}
           value={this.state.note}
           placeholder="Give us additional information..."
         />
-        <Message success header="Ok!" content={"Request registered, points transfer completed and stored on the blockchain"} />
-        <Message error header="Oops!" content={this.state.errorMessage} />
+        <Message success header="Ok!" content={"Request forwarded, points transfer completed and registered on the blockchain"} />
+        <Message error header="Oops!" content={this.state.errMsg} />
         <Form.Field control={Button}>Ask</Form.Field>
       </Form>
     );

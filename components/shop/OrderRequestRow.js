@@ -15,14 +15,27 @@ class OrderRequestRow extends Component {
         zipcode: "",
     };
 
+    onReject = async event => {
+        event.preventDefault();
+        event.persist();
+        // Get accounts.
+        const accounts = await web3.eth.getAccounts();
+        // Reject the order of the user.
+        await fidelityPoints.methods.rejectUserRequestBuy(this.props.id).send({
+            from: accounts[0],
+            gas: '4500000'
+        });
+    };
+
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
-
+        // Get accounts.
         const accounts = await web3.eth.getAccounts();
+        // Declare the order of the user as shipped.
         await fidelityPoints.methods.finalizeUserRequestBuy(this.props.id).send({
             from: accounts[0],
-            gas: '2000000'
+            gas: '4500000'
         });
     };
 
@@ -31,7 +44,7 @@ class OrderRequestRow extends Component {
         firebase.auth().onAuthStateChanged(function(user) {
             // User is signed in.
             if (user) {
-                // If data are not take, take it
+                // If user data are not take, take it
                 if (!self.state.userId) {
                     var userId = firebase.auth().currentUser.uid;
                     var ref = firebase.database().ref("users/" + userId);
@@ -52,9 +65,6 @@ class OrderRequestRow extends Component {
                         });
                     });
                 }
-            // No user is signed in.
-            } else {
-                console.log("User not logged.");
             }
         });
     }
@@ -62,9 +72,15 @@ class OrderRequestRow extends Component {
     render() {
         const { Cell, Row } = Table;
         const { id, request } = this.props;
-
         return (
-            <Row disabled={request.completed} positive={!request.completed}>
+            <Row disabled={!!request.completed} positive={!!request.completed}>
+                <Cell>
+                    {request.reject ? null : (
+                        <Button color="teal" basic onClick={this.onReject} >
+                            Reject
+                        </Button>
+                    )}
+                </Cell>
                 <Cell>
                     {request.shipped ? null : (
                         <Button color="teal" basic onClick={this.onFinalize} >

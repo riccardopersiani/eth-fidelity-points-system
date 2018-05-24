@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Container, Header } from "semantic-ui-react";
-import HeaderTop from "../components/Header";
-import Footer from "../components/Footer";
+import Layout from "../components/template/Layout";
 import ShopShipOrderForm from "../components/shop/ShopShipOrderForm";
 import { Link, Router } from "../routes";
 
