@@ -1,27 +1,23 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
-import { Button, Checkbox, Icon, Table } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 import fidelityPoints from "../../ethereum/fido";
-import web3 from "../../ethereum/web3";
 import OrderRequestRow from "./OrderRequestRow";
 
 class ShopShipOrderForm extends Component {
     state = {
-        errMsg: '',
         buyingRequestCount: '',
         shopId: '',
-        requestList: [],
         buyingRequests: [],
-        loadingRenderFirst: true,
-        loading: false
+        loadingRenderFirst: true
     };
 
-    // Getting data when component is mounting
+    // Getting buying request data when component is mounting.
     componentDidMount() {
         var self = this;
         firebase.auth().onAuthStateChanged(async function(shop) {
             if (shop) {
-                // get all the buying reqyest
+                // Get all the buying requests.
                 const buyingRequestCount = await fidelityPoints.methods.getUserRequestsBuyCount().call();
                 const buyingRequests = await Promise.all(
                     Array(parseInt(buyingRequestCount))
