@@ -7,14 +7,16 @@ import * as firebase from "firebase";
 
 class OrderRequestRow extends Component {
     state = {
-        shippingAddress: "",
-        firstname: "",
-        lastname: "",
-        city: "",
-        country: "",
-        zipcode: "",
+        shippingAddress: '',
+        firstname: '',
+        lastname: '',
+        city: '',
+        country: '',
+        shopId: '',
+        zipcode: ''
     };
 
+    // Reject the user buy request
     onReject = async event => {
         event.preventDefault();
         event.persist();
@@ -27,6 +29,7 @@ class OrderRequestRow extends Component {
         });
     };
 
+    // Mark as shipped the user buy request
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
@@ -40,22 +43,25 @@ class OrderRequestRow extends Component {
     };
 
     componentDidMount() {
+        console.log("weeee");
         var self = this;
         firebase.auth().onAuthStateChanged(function(user) {
             // User is signed in.
             if (user) {
                 // If user data are not take, take it
-                if (!self.state.userId) {
-                    var userId = firebase.auth().currentUser.uid;
-                    var ref = firebase.database().ref("users/" + userId);
+                if (!self.state.shopId) {
+                    var shopId = firebase.auth().currentUser.uid;
+                    var ref = firebase.database().ref("shops/" + shopId);
+                    console.log("shopId",shopId);
                     ref.once("value").then(function(snapshot) {
-                        var shippingAddress = snapshot.child("address").val();
-                        var firstname = snapshot.child("firstname").val();
-                        var lastname = snapshot.child("lastname").val();
+                        var shippingAddress = snapshot.child("shopAddress").val();
+                        var firstname = snapshot.child("ownerFirstName").val();
+                        var lastname = snapshot.child("ownerFirstLast").val();
                         var city = snapshot.child("city").val();
                         var country = snapshot.child("country").val();
                         var zipcode = snapshot.child("zipcode").val();
                         self.setState({
+                            shopId,
                             shippingAddress,
                             firstname,
                             lastname,
@@ -63,6 +69,8 @@ class OrderRequestRow extends Component {
                             country,
                             zipcode,
                         });
+                        console.log("shippingAddress",shippingAddress);
+
                     });
                 }
             }
@@ -71,7 +79,7 @@ class OrderRequestRow extends Component {
 
     render() {
         const { Cell, Row } = Table;
-        const { id, request } = this.props;
+        const { request } = this.props;
         return (
             <Row disabled={!!request.completed} positive={!!request.completed}>
                 <Cell>
@@ -93,7 +101,8 @@ class OrderRequestRow extends Component {
                 <Cell>{request.user}</Cell>
                 <Cell>{request.value}</Cell>
                 <Cell>{request.product} FID</Cell>
-                <Cell>{request.shipped}</Cell>
+                <Cell>{request.shipped.toString()}</Cell>
+                <Cell>{request.rejected.toString()}</Cell>
             </Row>
         );
     }

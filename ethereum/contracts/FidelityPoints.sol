@@ -429,6 +429,8 @@ contract FidelityPoints is IERC20, Owned {
         BuyingRequest storage buyingRequest = buyingRequests[_index];
         // Check if the product of the request is still not rejected.
         require(!buyingRequests[_index].rejected);
+        // Check if the product of the request is still not shipped.
+        require(!buyingRequests[_index].shipped);
         // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
         buyingRequest.rejected = true;
     }

@@ -7,7 +7,7 @@ import OrderRequestRow from "./OrderRequestRow";
 class ShopShipOrderForm extends Component {
     state = {
         buyingRequestCount: '',
-        shopId: '',
+        shopAddress: '',
         buyingRequests: [],
         loadingRenderFirst: true
     };
@@ -19,6 +19,11 @@ class ShopShipOrderForm extends Component {
             if (shop) {
                 // Get all the buying requests.
                 const shopId = shop.uid;
+                var ref = firebase.database().ref("shops/" + shopId);
+                ref.once("value").then(function(snapshot) {
+                    const shopAddress = snapshot.child("ethereum").val();
+                    self.setState({ shopAddress })
+                });
                 const buyingRequestCount = await fidelityPoints.methods.getUserRequestsBuyCount().call();
                 const buyingRequests = await Promise.all(
                     Array(parseInt(buyingRequestCount))
@@ -27,7 +32,7 @@ class ShopShipOrderForm extends Component {
                         return fidelityPoints.methods.buyingRequests(index).call();
                     })
                 );
-                self.setState({ shopId, buyingRequestCount, buyingRequests, loadingRenderFirst: false });
+                self.setState({ buyingRequestCount, buyingRequests, loadingRenderFirst: false });
             }
         });
     }
@@ -36,7 +41,7 @@ class ShopShipOrderForm extends Component {
         // Get all the buying request from all the users.
         return this.state.buyingRequests.map((request, index) => {
             // Show only the request to the current shop logged in.
-            if(request.shopId == this.state.shopId){
+            if(request.shop == this.state.shopAddress){
                 return <OrderRequestRow
                     key={index}
                     id={index}
@@ -84,6 +89,7 @@ class ShopShipOrderForm extends Component {
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Product</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
+                            <Table.HeaderCell>Rejected</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -95,7 +101,7 @@ class ShopShipOrderForm extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
-                            <Table.HeaderCell colSpan="4" />
+                            <Table.HeaderCell colSpan="5" />
                         </Table.Row>
                     </Table.Footer>
                 </Table>
