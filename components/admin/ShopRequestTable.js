@@ -8,7 +8,7 @@ class ShopRequestTable extends Component {
   state = {
     shopList: [],
     loadingRenderFirst: true,
-    errorMessage: '',
+    errMsg: '',
     loading: false
   };
 
@@ -16,27 +16,25 @@ class ShopRequestTable extends Component {
   onSubmit = async event => {
     event.preventDefault();
     event.persist();
-    var shopEthereumAddress = event.target.value;
-    var shopId = event.target.id;
+    const shopEthereumAddress = event.target.value;
+    const shopId = event.target.id;
     this.setState({ loading: true });
-    try {
-        const accounts = await web3.eth.getAccounts();
-        await fidelityPoints.methods.addShop(shopEthereumAddress)
-        .send({
-            from: accounts[0],
-            gas: '4500000'
-        })
-        .then(() => {
-          // TODO CONTROLLARE CHE IL CURRENT USER SIA ADMIN ALTTRIMETI TUTTI POSSONO CAMBIARE IL DB
-          // Edit file in firebase and than in table.
-          firebase.app().database().ref("shops").child(shopId).update({ approved: true });
-        });
-      } catch (err) {
-        // TODO check if shop is not in the blockchain
-        firebase.app().database().ref("shops").child(shopId).update({ approved: false });
-        var trimmedString = err.message.substring(0, 90);
-        this.setState({ errorMessage: trimmedString });
-    }
+    // Get accounts.
+    const accounts = await web3.eth.getAccounts();
+    // Add the shop the official shop array in the contract.
+    await fidelityPoints.methods.addShop(shopEthereumAddress)
+    .send({
+      from: accounts[0],
+      gas: '4500000'
+    }).then(() => {
+      // Edit file in firebase and than in table.
+      firebase.app().database().ref("shops").child(shopId).update({ approved: true });
+    }).catch((err) => {
+      // If the operation fauls set the status to "approved = false".
+      firebase.app().database().ref("shops").child(shopId).update({ approved: false });
+      var trimmedString = err.message.substring(0, 90);
+      this.setState({ errMsg: trimmedString });
+    });
     this.setState({ loading: false });
     window.location.reload();
   }
@@ -44,7 +42,7 @@ class ShopRequestTable extends Component {
   // Load all shops from the db.
   async loadData() {
     var self = this;
-    var shopsRef = firebase.app().database().ref("shops").orderByChild("approved");
+    const shopsRef = firebase.app().database().ref("shops").orderByChild("approved");
     var promise = new Promise((resolve, reject) => {
       shopsRef.once("value").then(function(snapshot) {
         resolve(snapshot);
@@ -66,9 +64,6 @@ class ShopRequestTable extends Component {
         });
         self.setState({ loadingRenderFirst: false });
         return promise;
-      })
-      .catch((err) => {
-        console.log("TODO Error handling");
       });
   }
 

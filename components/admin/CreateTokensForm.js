@@ -6,6 +6,11 @@ import { Router } from '../../routes';
 
 
 class CreateTokensForm extends Component {
+    static async getInitialProps(props) {
+        return {
+            rate: props.rate
+        };
+    }
     state = {
         value: '',
         errMsg: '',
@@ -18,8 +23,11 @@ class CreateTokensForm extends Component {
         event.preventDefault();
         this.setState({ loading: true, errMsg: false, okMsg: false });
         try {
+            // Get accounts.
             const accounts = await web3.eth.getAccounts();
-            const tokens = this.state.value * 1000000000000000000;
+            // Get the number of tokens to be generated.
+            const tokens = this.state.value * this.props.rate;
+            // Create tokens operation, set 'ether' as input value,, only the owner can call this function.
             await fidelityPoints.methods.createTokens()
             .send({
                 from: accounts[0],
@@ -46,7 +54,7 @@ class CreateTokensForm extends Component {
                     />
                 </Form.Field>
                 <Message error header="Oops!" content={this.state.errMsg} />
-                <Message success header="Ok!" content={`Successfull creation of ${this.state.tokens} FIDO`} />
+                <Message success header="Ok!" content={`Successfull creation of ${this.state.tokens} tokens`} />
                 <Button primary>Create</Button>
             </Form>
         );

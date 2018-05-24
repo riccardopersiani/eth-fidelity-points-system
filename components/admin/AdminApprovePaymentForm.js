@@ -8,10 +8,8 @@ import Psd2RequestRow from "./Psd2RequestRow";
 class AdminApprovePaymentForm extends Component {
   state = {
     loadingRenderFirst: true,
-    errorMessage: "",
     ethereumRequests: [],
     psd2Requests: [],
-    loading: false
   };
 
   // Getting psd2 payments.
@@ -46,7 +44,7 @@ class AdminApprovePaymentForm extends Component {
         self.setState({ ethereumRequests, loadingRenderFirst: false });
         return promise;
       }).catch(err => {
-        console.log("This happens 7th - nel catch, err", err);
+        console.log("TODO This happens 7th - nel catch, err", err);
       });
   }
 
@@ -58,7 +56,7 @@ class AdminApprovePaymentForm extends Component {
             id={index}
             request={request}
         />
-    })
+    });
   }
 
   // Rendering Psd2 payment request asked by every shop
@@ -69,10 +67,11 @@ class AdminApprovePaymentForm extends Component {
             id={request.key}
             request={request.val()}
         />
-    })
+    });
   }
 
   render() {
+    // Phase 1 of rendering, data not fetched from the db.
     if (this.state.loadingRenderFirst == true) {
       return (
         <Table celled compact definition size="small">
@@ -80,7 +79,7 @@ class AdminApprovePaymentForm extends Component {
             <Table.Row key={"header"}>
               <Table.HeaderCell />
               <Table.HeaderCell />
-              <Table.HeaderCell>Shop Name</Table.HeaderCell>
+              <Table.HeaderCell>Shop Id</Table.HeaderCell>
               <Table.HeaderCell>Amount</Table.HeaderCell>
               <Table.HeaderCell>Method</Table.HeaderCell>
               <Table.HeaderCell>Address</Table.HeaderCell>
@@ -98,6 +97,7 @@ class AdminApprovePaymentForm extends Component {
         </Table>
       );
     }
+    // Phase 2 of rendering, data fetched from the db.
     if (this.state.loadingRenderFirst == false) {
       return (
         <Table celled compact definition size="small">
@@ -105,7 +105,7 @@ class AdminApprovePaymentForm extends Component {
             <Table.Row key={"header"}>
               <Table.HeaderCell />
               <Table.HeaderCell />
-              <Table.HeaderCell>Shop Name</Table.HeaderCell>
+              <Table.HeaderCell>Shop Id</Table.HeaderCell>
               <Table.HeaderCell>Amount</Table.HeaderCell>
               <Table.HeaderCell>Method</Table.HeaderCell>
               <Table.HeaderCell>Address</Table.HeaderCell>
@@ -128,4 +128,5 @@ class AdminApprovePaymentForm extends Component {
     }
   }
 }
+
 export default AdminApprovePaymentForm;

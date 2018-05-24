@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Message, Header } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import Layout from '../components/template/Layout';
 import CreateTokensForm from '../components/admin/CreateTokensForm';
 import { Link, Router } from '../routes';
@@ -9,19 +9,11 @@ import fidelityPoints from '../ethereum/fido';
 class CreateTokensNew extends Component {
     static async getInitialProps(props) {
         const summary = await fidelityPoints.methods.getSummary().call();
-        const address = await fidelityPoints.options.address;
         return {
-            address: address,
-            rate: summary[5],
-            owner: summary[1]
+            owner: summary[1],
+            rate: summary[5]
         };
     }
-
-    state = {
-        amount: '',
-        errorMessage: '',
-        loading: false
-    };
 
     render() {
         return(
@@ -32,7 +24,7 @@ class CreateTokensNew extends Component {
                 <p>The owner is related to this address: {this.props.owner}</p>
                 <br/>
                 <br/>
-                <CreateTokensForm/>
+                <CreateTokensForm rate={this.props.rate}/>
                 <br/>
                 <br/>
                 <p>The manager of the contract is initlially provided with an initial supply of tokens.</p>

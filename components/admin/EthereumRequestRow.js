@@ -8,9 +8,9 @@ class EthereumRequestRow extends Component {
     onReject = async event => {
         event.preventDefault();
         event.persist();
-
-        console.log("Parameter passed in event => Eth value: ", event.target.value)
+        // Get accounts.
         const accounts = await web3.eth.getAccounts();
+        // Reject the ether request performed by the shop.
         await fidelityPoints.methods.rejectRequestEthereum(this.props.id).send({
             from: accounts[0],
             gas: '4500000'
@@ -20,9 +20,9 @@ class EthereumRequestRow extends Component {
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
-
-        console.log("Parameter passed in event => Eth value: ", event.target.value)
+        // Get accounts.
         const accounts = await web3.eth.getAccounts();
+        // Transfer ether in the request to the shop.
         await fidelityPoints.methods.finalizeRequestEthereum(this.props.id).send({
             from: accounts[0],
             value: event.target.value
@@ -31,10 +31,9 @@ class EthereumRequestRow extends Component {
 
     render() {
         const { Cell, Row } = Table;
-        const { id, request, approversCount } = this.props;
-
+        const { id, request } = this.props;
         return (
-            <Row disabled={request.completed} positive={!request.completed}>
+            <Row disabled={!!request.completed} positive={!!request.completed} negative={!!request.rejected}>
                 <Cell>
                     {request.rejected ? null : (
                         <Button color="red" basic onClick={this.onReject}>
@@ -49,7 +48,7 @@ class EthereumRequestRow extends Component {
                         </Button>
                     )}
                 </Cell>
-                <Cell>{id}</Cell>
+                <Cell>{reuqest.shopId}</Cell>
                 <Cell>{request.value} FID</Cell>
                 <Cell>{request.method}</Cell>
                 <Cell>{request.shop}</Cell>

@@ -8,15 +8,13 @@ class Psd2RequestRow extends Component {
     onReject = async event => {
         event.preventDefault();
         event.persist();
-        // Firebase write rejected = true in the pending psd2 requests
+        // Firebase write "rejected = true" in the pending psd2 requests.
         firebase.database().ref("pending_payments_psd2/" + event.target.value + "/rejected/").set(true);
-
     };
 
     onFinalize = async event => {
         event.preventDefault();
         event.persist();
-        console.log("Parameter passed in event => EUR ID: ", event.target.value)
         // Send the pid to express
         window.location.replace(`http://localhost:8085?pid=${event.target.value}`);
     };
@@ -24,9 +22,8 @@ class Psd2RequestRow extends Component {
     render() {
         const { Cell, Row } = Table;
         const { id, request, approversCount } = this.props;
-
         return (
-            <Row negative={request.rejected} disabled={request.completed & !request.rejected} positive={!request.completed}>
+            <Row negative={!!request.rejected} disabled={!!request.completed || !!request.rejected} positive={!!request.completed}>
                 <Cell>
                     {request.rejected ? null : (
                         <Button color="teal" basic onClick={this.onReject} value={id}>
@@ -41,7 +38,7 @@ class Psd2RequestRow extends Component {
                         </Button>
                     )}
                 </Cell>
-                <Cell>{id}</Cell>
+                <Cell>{request.shopId}</Cell>
                 <Cell>{request.tokenAmount} FID</Cell>
                 <Cell>{request.method}</Cell>
                 <Cell>{request.shop}</Cell>
