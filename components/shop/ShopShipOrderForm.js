@@ -18,16 +18,16 @@ class ShopShipOrderForm extends Component {
         firebase.auth().onAuthStateChanged(async function(shop) {
             if (shop) {
                 // Get all the buying requests.
+                const shopId = shop.uid;
                 const buyingRequestCount = await fidelityPoints.methods.getUserRequestsBuyCount().call();
                 const buyingRequests = await Promise.all(
                     Array(parseInt(buyingRequestCount))
                     .fill()
                     .map((element, index) => {
-                        console.log("element: ", element);
                         return fidelityPoints.methods.buyingRequests(index).call();
                     })
                 );
-                self.setState({ shopId: shop.uid, buyingRequestCount, buyingRequests, loadingRenderFirst: false });
+                self.setState({ shopId, buyingRequestCount, buyingRequests, loadingRenderFirst: false });
             }
         });
     }
@@ -36,7 +36,7 @@ class ShopShipOrderForm extends Component {
         // Get all the buying request from all the users.
         return this.state.buyingRequests.map((request, index) => {
             // Show only the request to the current shop logged in.
-            if(request.shopId == shopId){
+            if(request.shopId == this.state.shopId){
                 return <OrderRequestRow
                     key={index}
                     id={index}
@@ -47,7 +47,6 @@ class ShopShipOrderForm extends Component {
     }
 
     render() {
-        const { id, request } = this.props;
         if (this.state.loadingRenderFirst == true) {
             return (
                 <Table celled compact definition size="small">

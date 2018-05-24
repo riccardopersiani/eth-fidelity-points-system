@@ -87,7 +87,6 @@ class ShopRequestStatusTable extends Component {
                 <Table celled compact definition size="small">
                 <Table.Header fullWidth>
                     <Table.Row key={"header"}>
-                        <Table.HeaderCell>Shop Name</Table.HeaderCell>
                         <Table.HeaderCell>Amount</Table.HeaderCell>
                         <Table.HeaderCell>Method</Table.HeaderCell>
                         <Table.HeaderCell>Address</Table.HeaderCell>
@@ -97,8 +96,7 @@ class ShopRequestStatusTable extends Component {
                 <Table.Body />
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell />
-                        <Table.HeaderCell colSpan="5" />
+                        <Table.HeaderCell colSpan="4" />
                     </Table.Row>
                 </Table.Footer>
                 </Table>
@@ -109,7 +107,6 @@ class ShopRequestStatusTable extends Component {
                 <Table celled compact definition size="small">
                 <Table.Header fullWidth>
                     <Table.Row key={"header"}>
-                        <Table.HeaderCell>Shop Name</Table.HeaderCell>
                         <Table.HeaderCell>Amount</Table.HeaderCell>
                         <Table.HeaderCell>Method</Table.HeaderCell>
                         <Table.HeaderCell>Address</Table.HeaderCell>
@@ -122,7 +119,6 @@ class ShopRequestStatusTable extends Component {
                 </Table.Body>
                 <Table.Footer fullWidth>
                     <Table.Row>
-                        <Table.HeaderCell />
                         <Table.HeaderCell />
                         <Table.HeaderCell />
                         <Table.HeaderCell />

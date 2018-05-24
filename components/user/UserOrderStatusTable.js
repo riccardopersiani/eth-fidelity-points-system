@@ -63,12 +63,13 @@ class UserOrderStatusTable extends Component {
                             <Table.HeaderCell>Shop Address</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
+                            <Table.HeaderCell>Rejected</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body />
                     <Table.Footer fullWidth>
                         <Table.Row>
-                            <Table.HeaderCell colSpan="5" />
+                            <Table.HeaderCell colSpan="6" />
                         </Table.Row>
                     </Table.Footer>
                 </Table>
@@ -84,6 +85,7 @@ class UserOrderStatusTable extends Component {
                             <Table.HeaderCell>Shop Address</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
+                            <Table.HeaderCell>Rejected</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -91,6 +93,7 @@ class UserOrderStatusTable extends Component {
                     </Table.Body>
                     <Table.Footer fullWidth>
                         <Table.Row>
+                            <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell />
