@@ -83,14 +83,14 @@ class OrderRequestRow extends Component {
         return (
             <Row disabled={!!request.completed} positive={!!request.completed}>
                 <Cell>
-                    {request.reject ? null : (
+                    {(request.reject || request.shipped) ? null : (
                         <Button color="teal" basic onClick={this.onReject} >
                             Reject
                         </Button>
                     )}
                 </Cell>
                 <Cell>
-                    {request.shipped ? null : (
+                    {(request.reject || request.shipped) ? null : (
                         <Button color="teal" basic onClick={this.onFinalize} >
                             Ship
                         </Button>

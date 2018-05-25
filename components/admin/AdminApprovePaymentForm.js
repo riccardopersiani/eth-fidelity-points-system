@@ -79,10 +79,9 @@ class AdminApprovePaymentForm extends Component {
             <Table.Row key={"header"}>
               <Table.HeaderCell />
               <Table.HeaderCell />
-              <Table.HeaderCell>Shop Id</Table.HeaderCell>
               <Table.HeaderCell>Amount</Table.HeaderCell>
               <Table.HeaderCell>Method</Table.HeaderCell>
-              <Table.HeaderCell>Address</Table.HeaderCell>
+              <Table.HeaderCell>Shop</Table.HeaderCell>
               <Table.HeaderCell>Note</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -105,7 +104,6 @@ class AdminApprovePaymentForm extends Component {
             <Table.Row key={"header"}>
               <Table.HeaderCell />
               <Table.HeaderCell />
-              <Table.HeaderCell>Shop Id</Table.HeaderCell>
               <Table.HeaderCell>Amount</Table.HeaderCell>
               <Table.HeaderCell>Method</Table.HeaderCell>
               <Table.HeaderCell>Address</Table.HeaderCell>

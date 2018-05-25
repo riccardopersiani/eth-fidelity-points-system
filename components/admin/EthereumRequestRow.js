@@ -17,6 +17,8 @@ class EthereumRequestRow extends Component {
         await fidelityPoints.methods.rejectRequestEthereum(this.props.id).send({
             from: accounts[0],
             gas: '4500000'
+        }).catch(() => {
+            this.setState({ loading: false })
         });
         this.setState({ loading: false });
     };
@@ -31,6 +33,8 @@ class EthereumRequestRow extends Component {
         await fidelityPoints.methods.finalizeRequestEthereum(this.props.id).send({
             from: accounts[0],
             value: event.target.value
+        }).catch(() => {
+            this.setState({ loading: false })
         });
         this.setState({ loading: false });
 
@@ -56,7 +60,6 @@ class EthereumRequestRow extends Component {
                         </Button>
                     )}
                 </Cell>
-                <Cell>{request.shopId}</Cell>
                 <Cell>{request.value} FID</Cell>
                 <Cell>Ethereum</Cell>
                 <Cell>{request.shop}</Cell>

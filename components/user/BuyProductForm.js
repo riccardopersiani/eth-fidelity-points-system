@@ -19,7 +19,6 @@ class BuyProductForm extends Component {
     }
 
     componentDidMount() {
-        console.log("componentDidMount");
         var self = this;
         firebase.auth().onAuthStateChanged(function(user) {
             // User is signed in.
@@ -35,18 +34,12 @@ class BuyProductForm extends Component {
 
     onSubmit = async event => {
         event.preventDefault();
-        console.log("onSubmit");
-
         const { value, receiver, product, shopEmail, userId } = this.state;
         this.setState({ loading: true, errMsg: false, okMsg: false });
         try {
+            // Get the accounts.
             const accounts = await web3.eth.getAccounts();
-            console.log("accounts");
-            console.log("product",product);
-            console.log("shopEmail",shopEmail);
-            console.log("receiver",receiver);
-            console.log("value",value);
-            console.log("userId",userId);
+            // Create the buying requst on the contract
             await fidelityPoints.methods.createBuyingRequest(
                 product,
                 shopEmail,

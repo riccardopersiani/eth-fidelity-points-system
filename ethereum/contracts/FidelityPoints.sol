@@ -37,11 +37,7 @@ interface IERC20 {
     function totalSupply() public constant returns (uint256 totalSupply);
     function balanceOf(address _owner) public constant returns (uint256 balance);
     function transfer(address _to, uint256 _value) public returns (bool success);
-    //function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
-    //function allowance(address _owner, address _spender) public constant returns (uint256 remaining);
-    //function approve(address _spender, uint256 _value) public returns (bool success);
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    //event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 }
 
 
@@ -124,12 +120,6 @@ contract FidelityPoints is IERC20, Owned {
     // Events definition.
     // This notify clients about the transfer.
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    // This notifies clients about approvation.
-    //event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-    // This notifies clients about the account freezing.
-    // event FrozenFunds(address target, bool frozen);
-    // This notifies clients about the amount burnt.
-    // event Burn(address indexed _from, uint256 _value);
 
     // Constructor, set the contract sender/deployer as owner.
     function FidelityPoints() public {
@@ -148,7 +138,7 @@ contract FidelityPoints is IERC20, Owned {
     }
 
     /******************************************************************************
-     * Fallback function, a function with no name that gets called                *
+     * Fallback function, a function with no name that gets called.                *
      * whenever you do not actually pass a function name.                         *
      * This allow people to just send money directly to the contract address.     *
      ******************************************************************************/
@@ -167,16 +157,17 @@ contract FidelityPoints is IERC20, Owned {
     * Perform a FIDO token generation.                                           *
     ******************************************************************************/
     function createTokens() public payable onlyOwner {
-        // Check if the amount trasfered is greather than 0
+        // Check if the amount trasfered is greather than 0.
         require(msg.value > 0);
+        // Check if the sender address is 0.
         require(msg.sender != 0x00);
-        // Create Fidelity Points from Ether
-        uint256 tokens = msg.value.mul(RATE); // moltiplica per 10^18
-        // Add fidelity points to the buyer account
+        // Create tokens from Ether multiplying for 10^18
+        uint256 tokens = msg.value.mul(RATE);
+        // Add tokens to the buyer account.
         balances[msg.sender] = balances[msg.sender].add(tokens);
-        // Total supply number increased by the new token creation
+        // Total supply number increased by the new token creation.
         _totalSupply = _totalSupply.add(tokens);
-        // Rollback auto if transaction fail.
+        // Transfer the amount to the owner, auto rollback if the transaction fails.
         owner.transfer(msg.value);
     }
 
@@ -185,8 +176,8 @@ contract FidelityPoints is IERC20, Owned {
     *                                                                            *
     * Return true if success.                                                    *
     *                                                                            *
-    * @param _to the address of the receiver                                     *
-    * @param _value amount of ETH transfered                                     *
+    * @param _to the address of the receiver.                                    *
+    * @param _value amount of ETH transfered.                                    *
     ******************************************************************************/
     function payWithEthereum(address _to, uint256 _value) public payable onlyOwner returns (bool success) {
         // Check if the amount trasfered is greather than 0.
@@ -202,7 +193,7 @@ contract FidelityPoints is IERC20, Owned {
     * Return the total supply of the token.                                      *
     *                                                                            *
     *                                                                            *
-    * Return the value of the variable `_totalSupply`                            *
+    * Return the value of the variable `_totalSupply`.                           *
     ******************************************************************************/
     function totalSupply() public constant returns (uint256 totalSupply) {
         // Value of the contract variable
@@ -214,7 +205,7 @@ contract FidelityPoints is IERC20, Owned {
     *                                                                            *
     * Return the amount of money of the `_account`.                              *
     *                                                                            *
-    * @param _account the address of the account of which I want the balance     *
+    * @param _account the address of the account of which I want the balance.    *
     ******************************************************************************/
     function balanceOf(address _account) public constant returns (uint256 balance) {
         return balances[_account];
@@ -230,25 +221,25 @@ contract FidelityPoints is IERC20, Owned {
     ******************************************************************************/
     function transfer(address _to, uint256 _value) public returns (bool success) {
         _value = _value * 10 ** uint256(decimals);
-        // Check if the sender has enough
+        // Check if the sender has enough.
         require(balances[msg.sender] >= _value);
-        // Check if the amount trasfered is greather than 0
+        // Check if the amount trasfered is greather than 0.
         require(_value > 0);
-        // Prevent transfer to 0x0 address. Use burn() instead
+        // Prevent transfer to 0x0 address.
         require(_to != 0x0);
-        // Check for overflows
+        // Check for overflows.
         require(balances[_to] + _value > balances[_to]);
-        // Check for underflows
+        // Check for underflows.
         require(balances[msg.sender] - _value < balances[msg.sender]);
-        // Save for the future assertion
+        // Save for the future assertion.
         uint previousBalances = balances[msg.sender].add(balances[_to]);
-        // Subtract the token amount from the sender
+        // Subtract the token amount from the sender.
         balances[msg.sender] = balances[msg.sender].sub(_value);
-        // Add the token amount to the recipient
+        // Add the token amount to the recipient.
         balances[_to] = balances[_to].add(_value);
-        // Emit the Transfer event
+        // Emit the Transfer event.
         emit Transfer(msg.sender, _to, _value);
-        // Asserts are used to use static analysis to find bugs in code. They should never fail
+        // Asserts are used to use static analysis to find bugs in code. They should never fail.
         assert(balances[msg.sender].add(balances[_to]) == previousBalances);
         return true;
     }
@@ -273,10 +264,9 @@ contract FidelityPoints is IERC20, Owned {
     * Add a new shop to the collection of official shops                         *
     ******************************************************************************/
     function addShop(address _newShop) public onlyOwner returns (bool) {
-        // TODO Check se lo shop è già presente..., deve essere unico
-        // add shop in shops Array
+        // Add shop in shops Array
         shops.push(_newShop);
-        // add shop in shopsMap
+        // Add shop in shopsMap
         shopsMap[_newShop] = true;
         return true;
     }
@@ -289,7 +279,7 @@ contract FidelityPoints is IERC20, Owned {
     }
 
     /*****************************************************************************
-    * Shop create a request to be payed  and pay the ISP                         *
+    * Shop create a request to be payed  and pay the ISP.                        *
     *                                                                            *
     *                                                                            *
     * @param _value                                                              *
@@ -298,17 +288,17 @@ contract FidelityPoints is IERC20, Owned {
     ******************************************************************************/
     function createEthereumPaymentRequest(uint _value, string _note, string _shopId)
         public onlyShop returns (bool) {
-            // Check if the sender has enough
+            // Check if the shop has enough token.
             require(balances[msg.sender] >= _value);
-            // Check if the amount trasfered is greather than 0
+            // Check if the amount trasfered is greather than 0.
             require(_value > 0);
-            // Prevent transfer to 0x0 address. Use burn() instead
+            // Prevent transfer to 0x0 address.
             require(owner != 0x0);
-            // Check for overflows
+            // Check for overflows.
             require(balances[owner] + _value > balances[owner]);
-            // Check for underflows ?
+            // Check for underflows.
             require(balances[msg.sender] - _value < balances[msg.sender]);
-            // Create the new EthPaymentRequest
+            // Create the new EthereumPaymentRequest.
             EthereumPaymentRequest memory ethereumPaymentRequest = EthereumPaymentRequest({
                 shop: msg.sender,
                 note: _note,
@@ -317,25 +307,25 @@ contract FidelityPoints is IERC20, Owned {
                 completed: false,
                 rejected: false
             });
-            // Adding a new ethereum payment request
+            // Adding a new ethereum payment request.
             ethereumPaymentRequests.push(ethereumPaymentRequest);
-            // Value convertion
+            // Value convertion.
             _value = _value * 10 ** uint256(decimals);
-            // Save for the future assertion
+            // Save for the future assertion.
             uint previousBalances = balances[msg.sender].add(balances[owner]);
-            // Subtract the token amount from the sender
+            // Subtract the token amount from the shop.
             balances[msg.sender] = balances[msg.sender].sub(_value);
-            // Add the token amount to the recipient
+            // Add the token amount to the contract owner.
             balances[owner] = balances[owner].add(_value);
-            // Emit the Transfer event
+            // Emit the Transfer event.
             emit Transfer(msg.sender, owner, _value);
-            // Asserts are used to use static analysis to find bugs in code. They should never fail
+            // Asserts are used to use static analysis to find bugs in code. They should never fail.
             assert(balances[msg.sender].add(balances[owner]) == previousBalances);
             return true;
         }
 
     /*****************************************************************************
-    * User create a request to buy a product from a shop                         *
+    * User create a request to buy a product from a shop.                        *
     *                                                                            *
     *                                                                            *
     * @param _product                                                            *
@@ -350,7 +340,7 @@ contract FidelityPoints is IERC20, Owned {
             require(balances[msg.sender] >= _value);
             // Check if the amount trasfered is greather than 0.
             require(_value > 0);
-            // Prevent transfer to 0x0 address. Use burn() instead.
+            // Prevent transfer to 0x0 address.
             require(_receiver != 0x0);
             // Check for overflows.
             require(balances[_receiver] + _value > balances[_receiver]);
@@ -369,41 +359,41 @@ contract FidelityPoints is IERC20, Owned {
                 shipped: false,
                 rejected: false
             });
-            // Adding a new buy request
+            // Adding a new buy request.
             buyingRequests.push(buyingRequest);
-            // Value convertion
+            // Value convertion.
             _value = _value * 10 ** uint256(decimals);
-            // Save for the future assertion
+            // Save for the future assertion.
             uint previousBalances = balances[msg.sender].add(balances[_receiver]);
-            // Subtract the token amount from the sender
+            // Subtract the token amount from the user sender.
             balances[msg.sender] = balances[msg.sender].sub(_value);
-            // Add the token amount to the recipient
+            // Add the token amount to the shop receiver
             balances[_receiver] = balances[_receiver].add(_value);
-            // Emit the Transfer event
+            // Emit the Transfer event.
             emit Transfer(msg.sender, _receiver, _value);
-            // Asserts are used to use static analysis to find bugs in code. They should never fail
+            // Asserts are used to use static analysis to find bugs in code. They should never fail.
             assert(balances[msg.sender].add(balances[_receiver]) == previousBalances);
             return true;
         }
 
     /*****************************************************************************
-    * Used for returning ethereum payment requests done by shop one by one       *
+    * Used for returning ethereum payment requests done by shop one by one.      *
     ******************************************************************************/
     function getRequestsCount() public view returns (uint256) {
         return ethereumPaymentRequests.length;
     }
 
     /*****************************************************************************
-    * Used for returning user buy requests one by one                            *
+    * Used for returning user buy requests one by one.                           *
     ******************************************************************************/
     function getUserRequestsBuyCount() public view returns (uint256) {
         return buyingRequests.length;
     }
 
     /****************************************************************************
-    * Shop accepts the request and user is notified                             *
+    * Shop accepts the request and user is notified.                            *
     *                                                                           *
-    * shop ship the product if phisical                                         *
+    * shop ship the product if phisical.                                        *
     *                                                                           *
     * @param _index                                                             *
     *****************************************************************************/
@@ -418,7 +408,7 @@ contract FidelityPoints is IERC20, Owned {
     }
 
     /****************************************************************************
-    * Shop rejected the request and user is notified                            *
+    * Shop rejected the request and user is refunded with tokens                *
     *                                                                           *
     * If the product has been shipped it can still be rejected                  *
     * tokens should be given back later                                         *
@@ -431,14 +421,26 @@ contract FidelityPoints is IERC20, Owned {
         require(!buyingRequests[_index].rejected);
         // Check if the product of the request is still not shipped.
         require(!buyingRequests[_index].shipped);
-        // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
+        // Value convertion
+        uint value = buyingRequest.value * 10 ** uint256(decimals);
+        // Save for the future assertion.
+        uint previousBalances = balances[buyingRequest.shop].add(balances[buyingRequest.user]);
+        // Subtract the token amount from the shop.
+        balances[buyingRequest.shop] = balances[buyingRequest.shop].sub(value);
+        // Give back the token amount to the user.
+        balances[buyingRequest.user] = balances[buyingRequest.user].add(value);
+        // Emit the Transfer event.
+        emit Transfer(buyingRequest.shop, buyingRequest.user, value);
+        // Asserts are used to use static analysis to find bugs in code. They should never fail.
+        assert(balances[buyingRequest.shop].add(balances[buyingRequest.user]) == previousBalances);
+        // Set the request as rejected.
         buyingRequest.rejected = true;
     }
 
     /****************************************************************************
-    * Owner accepts the request and shop is payed in eth                        *
+    * Owner accepts the request and shop is payed in eth.                       *
     *                                                                           *
-    * Owner finalize the request manually                                       *
+    * Owner finalize the request manually.                                      *
     *                                                                           *
     * @param _index                                                             *
     *****************************************************************************/
@@ -451,14 +453,13 @@ contract FidelityPoints is IERC20, Owned {
         // Convert Token to ethereum.
         uint256 ethValue = ethereumPaymentRequest.value.div(RATE);
         // Trasfer ethereum amount to the shop.
-        //TODO controllare che il pagamento sia in Eth
         ethereumPaymentRequest.shop.transfer(ethValue);
-        // Set status to completed.
+        // Set shop request status to completed.
         ethereumPaymentRequest.completed = true;
     }
 
     /****************************************************************************
-    * Owner reject the request and shop is notified                             *
+    * Owner reject the request and shop is refunded with tokens                 *
     *                                                                           *
     * @param _index                                                             *
     *****************************************************************************/
@@ -468,14 +469,19 @@ contract FidelityPoints is IERC20, Owned {
         require(!ethereumPaymentRequests[_index].completed);
         // Check if the product of the request is still not rejected.
         require(!ethereumPaymentRequests[_index].rejected);
-        // Set the request to shipped, this must be done after the product is shipped phisically by the shop.
+        // Value convertion.
+        uint value = ethereumPaymentRequest.value * 10 ** uint256(decimals);
+        // Save for the future assertion.
+        uint previousBalances = balances[owner].add(balances[ethereumPaymentRequest.shop]);
+        // Subtract the token amount from the owner.
+        balances[owner] = balances[owner].sub(value);
+        // Give bacje the token amount to the shop.
+        balances[ethereumPaymentRequest.shop] = balances[ethereumPaymentRequest.shop].add(value);
+        // Emit the Transfer event.
+        emit Transfer(owner, ethereumPaymentRequest.shop, value);
+        // Asserts are used to use static analysis to find bugs in code. They should never fail.
+        assert(balances[owner].add(balances[ethereumPaymentRequest.shop]) == previousBalances);
+        // Set the shop payment request as rejected.
         ethereumPaymentRequest.rejected = true;
-    }
-
-    /*****************************************************************************
-    * Used because string compare not present, so we need a trick for doing it   *
-    ******************************************************************************/
-    function compareStringsbyBytes(string s1, string s2) public pure returns(bool) {
-        return keccak256(s1) == keccak256(s2);
     }
 }

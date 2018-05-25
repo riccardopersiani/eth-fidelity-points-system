@@ -47,10 +47,8 @@ class ShopAskPaymentForm extends Component {
           const summary = await fidelityPoints.methods.getSummary().call();
           // Get the shop id which is asking for payment.
           var shop = firebase.auth().currentUser;
-          // get the shop info from db to get the eth account
-          console.log("guid(): ", guid());
           // Save the owner address in the state variable.
-          this.setState({ owner: summary[3], loading: true, okMsg: false, errMsg: false });
+          this.setState({ owner: summary[1], loading: true, okMsg: false, errMsg: false });
           // Get the accounts.
           const accounts = await web3.eth.getAccounts();
           // Send the token amount to the owner and create the request.
