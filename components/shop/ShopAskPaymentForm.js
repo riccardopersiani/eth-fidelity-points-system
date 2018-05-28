@@ -51,15 +51,8 @@ class ShopAskPaymentForm extends Component {
           this.setState({ owner: summary[1], loading: true, okMsg: false, errMsg: false });
           // Get the accounts.
           const accounts = await web3.eth.getAccounts();
-          // Send the token amount to the owner and create the request.
-          console.log("sending tokens for psd2 request in eth");
-          await fidelityPoints.methods.transfer(self.state.owner, self.state.value)
-          .send({
-            from: accounts[0],
-            gas: '5000000'
-          }).then(() => {
-            console.log("writing psd2 request in firebase");
-            // After the trasfer in the blockchain, register the payment in the db with paymentid = timestamp.
+          console.log("writing psd2 request in firebase");
+          // After the trasfer in the blockchain, register the payment in the db with paymentid = timestamp.
           firebase.app().database().ref("pending_payments_psd2/" +  guid())
           .set({
             shop: shop.uid, // in the blockchain is memorized the eth address, here avoid because we need a query to the database
@@ -70,10 +63,18 @@ class ShopAskPaymentForm extends Component {
             completed: false,
             rejected: false
           });
-          this.setState({ okMsg: true, loading: false });
+          // Send the token amount to the owner and create the request.
+          console.log("sending tokens for psd2 request in eth");
+          await fidelityPoints.methods.transfer(self.state.owner, self.state.value)
+          .send({
+            from: accounts[0],
+            gas: '5000000'
+          }).then(() => {
+            this.setState({ okMsg: true, loading: false });
           });
       }
     } catch (err) {
+      //TODO revert the psd2 request transaction
       // Print the first part of error message to the user.
       var trimmedString = err.message.substring(0, 150);
       this.setState({ errMsg: trimmedString, loading: false });
