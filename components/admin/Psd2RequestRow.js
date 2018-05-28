@@ -52,6 +52,7 @@ class Psd2RequestRow extends Component {
     };
 
     render() {
+        console.log("inside one psd2 row");
         const { Cell, Row } = Table;
         const { id, request } = this.props;
         return (

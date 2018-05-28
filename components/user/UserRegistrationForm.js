@@ -59,17 +59,24 @@ class UserRegistrationForm extends Component {
   // Submit the user request
   onSubmit = async event => {
     event.preventDefault();
+    console.log("object");
     var self = this;
     // Perform the form validation
     const err = this.validate();
+    console.log("after validate");
     if (!err) {
+      console.log("check error passed");
+
       // Create a new user with username and password and log in instantly
       firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then((response) => {
+          console.log("createUserWithEmailAndPassword");
           var user = firebase.auth().currentUser;
           // Send email verification to the user after registering him with emailVerified = false.
           user.sendEmailVerification()
             .then(function() {
+              console.log("sendEmailVerification");
+
               // If email is sent, save the user in the db.
               firebase.app().database().ref("users/" + user.uid)
                 .set({
@@ -84,15 +91,17 @@ class UserRegistrationForm extends Component {
                   ethereum: self.state.ethereum,
                   username: self.state.username
                 })
-                .then(() => alert("Email Verification Sent!"));
+                .then(() => {
+                  alert("Email Verification Sent!");
+                  // Redirect to home
+                  window.location.replace("http://localhost:3000/index");
+                });
             });
         })
         .catch((error) => {
           var trimmedString = err.message.substring(0, 90);
           this.setState({ errMsg: trimmedString });
         });
-      // Redirect to home
-      window.location.replace("http://localhost:3000/index");
     }
   };
 

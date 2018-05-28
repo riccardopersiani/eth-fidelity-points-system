@@ -40,11 +40,21 @@ class ShopIndex extends Component {
             },
             {
                 header: "Technology Shop",
-                meta: shops[1],
+                meta: shops[2],
                 description: (
-					<Link route={`/shops/${shops[1]}`}>
+					<Link route={`/shops/${shops[2]}`}>
 						<a>Enter shop</a>
 					</Link>
+				),
+                style: {overflowWrap: 'break-word'}
+            },
+            {
+                header: "Under Contruction...",
+                meta: shops[1],
+                description: (
+					{/*<Link route={`/shops/${shops[1]}`}>
+						<a>Enter shop</a>
+                </Link>*/}
 				),
                 style: {overflowWrap: 'break-word'}
             }

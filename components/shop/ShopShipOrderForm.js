@@ -60,17 +60,22 @@ class ShopShipOrderForm extends Component {
                             <Table.HeaderCell />
                             <Table.HeaderCell />
                             <Table.HeaderCell>User First Name</Table.HeaderCell>
+                            <Table.HeaderCell>Shipping Address</Table.HeaderCell>
                             <Table.HeaderCell>User Address</Table.HeaderCell>
                             <Table.HeaderCell>Value</Table.HeaderCell>
                             <Table.HeaderCell>Product</Table.HeaderCell>
                             <Table.HeaderCell>Shipped</Table.HeaderCell>
+                            <Table.HeaderCell>Rejected</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body />
                     <Table.Footer fullWidth>
                         <Table.Row>
                             <Table.HeaderCell />
-                            <Table.HeaderCell colSpan="4" />
+                            <Table.HeaderCell />
+                            <Table.HeaderCell />
+                            <Table.HeaderCell />
+                            <Table.HeaderCell colSpan="5" />
                         </Table.Row>
                     </Table.Footer>
                 </Table>
@@ -81,8 +86,8 @@ class ShopShipOrderForm extends Component {
                 <Table celled compact definition size="small">
                     <Table.Header fullWidth>
                         <Table.Row key={"header"}>
-                        <Table.HeaderCell />
-                        <Table.HeaderCell />
+                            <Table.HeaderCell />
+                            <Table.HeaderCell />
                             <Table.HeaderCell>User First Name</Table.HeaderCell>
                             <Table.HeaderCell>Shipping Address</Table.HeaderCell>
                             <Table.HeaderCell>User Address</Table.HeaderCell>

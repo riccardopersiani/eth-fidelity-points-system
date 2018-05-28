@@ -61,7 +61,9 @@ class AdminApprovePaymentForm extends Component {
 
   // Rendering Psd2 payment request asked by every shop
   renderRowsPsd2() {
+    console.log("Render psd2");
     return this.state.psd2Requests.map((request, index) => {
+      console.log("one row");
         return <Psd2RequestRow
             key={index}
             id={request.key}

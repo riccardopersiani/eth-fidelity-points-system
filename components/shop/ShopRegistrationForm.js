@@ -78,7 +78,6 @@ class ShopRegistrationForm extends Component {
           // Send email verification to the shop after registering him with emailVerified = false.
           shop.sendEmailVerification()
             .then(function() {
-              alert("Email Verification for Shop Sent!");
               firebase.app().database().ref("shops/" + shop.uid)
                 .set({
                   shopName: self.state.shopName,
@@ -97,6 +96,11 @@ class ShopRegistrationForm extends Component {
                   username: self.state.username,
                   approved: false,
                 })
+                .then(() => {
+                  alert("Email Verification for Shop Sent!");
+                  // Redirect to home
+                  window.location.replace("http://localhost:3000/index");
+                })
                 .catch(error => {
                   self.setState({ errorMessage: error.message });
                 });
@@ -106,8 +110,6 @@ class ShopRegistrationForm extends Component {
               self.setState({ errorMessage: error.message });
             });
         });
-      // Redirect to home
-      //window.location.replace("http://localhost:3000/index");
     }
   };
 

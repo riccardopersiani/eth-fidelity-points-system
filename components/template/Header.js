@@ -145,11 +145,11 @@ function AdminLogged() {
           <a>Token Generation</a>
         </Link>
       </Menu.Item>
-      <Menu.Item name="newShop">
+      {/*<Menu.Item name="newShop">
         <Link route="/newShop">
           <a>Add Shop</a>
         </Link>
-      </Menu.Item>
+  </Menu.Item>*/}
       <Menu.Item name="transfer">
         <Link route="/transfer">
           <a>Transfer</a>
