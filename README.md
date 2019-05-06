@@ -1,8 +1,11 @@
 ## __Fidelity Point System__ [![HitCount](http://hits.dwyl.io/riccardopersiani/fidelity-points-system-thesis.svg)](http://hits.dwyl.io/riccardopersiani/fidelity-points-system-thesis)[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-Computer Engineering Master's Degree thesis progect at Technical University of Turin
+Computer Engineering Master's Degree thesis progect at Technical University of Turin.
 
-### __Architecture__
+The purpose of this project is to show a complete Ethereum DApp.
+
+
+### :building_construction: __Architecture__
 
 These are 2 main components:
 
@@ -43,15 +46,11 @@ module.exports = {
 
 __`❍ npx truffle  deploy --network kovan`__
 
-**8)** In the main folder build the Next server:
-
-__`❍ npm run build`__
-
-**9)** In the main folder start the Next server:
+**8)** In the main folder start the Next server:
 
 __`❍ npm run dev`__
 
-**10)** Start the Express server:
+**9)** Start the Express server:
 
 __`❍ cd psd2 && node oauth.js`__
 
