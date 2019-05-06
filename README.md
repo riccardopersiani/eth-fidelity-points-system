@@ -60,6 +60,6 @@ __❍__ Note that your own Infura key and the Metamask passphrase must be kept s
 
 __❍__ The frontend application for the loyalty point system is reachable at https://localhost:3000/
 
-__❍__ The frontend application for the PSD2 payment is reachable at https://localhost:8085/ - https://localhost:8888/
+__❍__ The frontend application for the PSD2 payment is reachable at https://localhost:8085/
 
 __*Happy developing!*__
