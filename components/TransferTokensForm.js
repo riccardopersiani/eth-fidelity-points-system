@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { Message, Form, Button, Input } from 'semantic-ui-react';
-import fidelityPoints from '../ethereum/fido';
-import web3 from '../ethereum/web3';
-
+import React, { Component } from 'react'
+import { Message, Form, Button, Input } from 'semantic-ui-react'
+console.log("dirname: ", __dirname);
+const fidelityPoints = require('../ethereum/fido')
+const web3 = require('../ethereum/web3')
+console.log("after deploy")
 
 class TransferTokenForm extends Component {
     state = {
