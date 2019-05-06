@@ -11,8 +11,6 @@ const waitForEvent = (_event, _from = 0, _to = 'latest') =>
 
 const fileExists = _path => fs.existsSync(_path)
 
-console.log("PATH: ", API_PATH)
-
 const getExternalVariable = _variable =>
   fileExists(API_PATH)
     ? require(API_PATH)[_variable]
