@@ -1,6 +1,6 @@
 {
   "name": "@riccardopersiani/fidelity-points-system-thesis",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "loyalty program blockchain-based app",
   "bugs": {
     "url": "https://github.com/riccardopersiani/fidelity-points-system-thesis/issues",
@@ -25,8 +25,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start -p $PORT",
-    "heroku-postbuild": "next build"
+    "release": "standard-version"
   },
   "dependencies": {
     "atob": ">=2.1.0",
@@ -69,6 +68,7 @@
     "test": "test"
   },
   "devDependencies": {
+    "standard-version": "^6.0.1",
     "webpack": "^4.1.1"
   }
 }
