@@ -96,26 +96,21 @@ contract('❍  Fidelity Points Tests', async accounts => {
     }
   })
 
-  // /*
-  // * start total supply:            1000000000.
-  // * final total supply:   2000000001000000000.
-  // * */
-  // it('totalSupply increment with token creation', async () => {
-  //     let totalSupplyStart;
-  //     let totalSupplyFinal;
-  //     try {
-  //         totalSupplyStart = await fidelityPoints.methods.totalSupply().call();
-  //         await fidelityPoints.methods.createTokens().send({
-  //             value: '2',
-  //             from: accounts[0]
-  //         });
-  //         totalSupplyFinal = await fidelityPoints.methods.totalSupply().call();
-  //         assert(totalSupplyFinal>totalSupplyStart);
-
-  //     } catch (err) {
-  //         assert.fail(err);
-  //     }
-  // });
+  it('totalSupply increment with token creation', async () => {
+     let totalSupplyStart;
+     let totalSupplyFinal;
+     try {
+         totalSupplyStart = await contract.totalSupply.call();
+         await contract.createTokens({
+             from: accounts[0],
+             value: '2'
+         })
+         totalSupplyFinal = await contract.totalSupply.call()
+         assert(totalSupplyFinal > totalSupplyStart)
+     } catch (err) {
+       assert.fail(err);
+     }
+  });
 
   // it('only manager can create new tokens', async () => {
   //     let balance = await fidelityPoints.methods.balanceOf(accounts[1]).call();
