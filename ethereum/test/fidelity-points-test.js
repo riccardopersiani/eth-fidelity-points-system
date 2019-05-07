@@ -8,7 +8,7 @@ const fidelityPoints = artifacts.require('./FidelityPoints.sol')
 contract('❍  Fidelity Points Tests', async accounts => {
 
   const gasAmt = 3e6
-  const address = accounts[0]
+  const deployerAddress = accounts[0]
   const tokenSymbol = 'FID'
   const tokenName = 'Fido Coin'
   const tokenDecimals = 18
@@ -27,7 +27,7 @@ contract('❍  Fidelity Points Tests', async accounts => {
   it('marks deployer as the contract owner', async () => {
     const owner = await contract.owner.call();
     assert.strictEqual(
-      accounts[0],
+      deployerAddress,
       owner,
       'Contract owner was not set correctly'
     )
@@ -78,101 +78,53 @@ contract('❍  Fidelity Points Tests', async accounts => {
     )
   })
 
-  it('create tokens', async () => {
-    const acc_balance = await contract.balanceOf.call(accounts[0])
-    let balanceFinal
-    let balanceStart = await contract.balanceOf(accounts[0])
-    balanceStart = parseFloat(balanceStart)
+  it('checks create tokens increment final owner balance', async () => {
+    const balanceStart = await contract.balanceOf(deployerAddress)
+    await contract.createTokens({
+        from: deployerAddress,
+        value: '1'
+      })
+    let balanceFinal = await contract.balanceOf(deployerAddress)
+    assert(parseFloat(balanceFinal) > parseFloat(balanceStart))
+  })
+
+  it('checks totalSupply increment with token creation', async () => {
+    const totalSupplyStart = await contract.totalSupply.call();
+    await contract.createTokens({
+      from: deployerAddress,
+      value: '2'
+    })
+    const totalSupplyFinal = await contract.totalSupply.call()
+    assert(totalSupplyFinal > totalSupplyStart)
+  })
+
+  it('should revert new tokens creation with not-owner account ', async () => {
+    const expectedError = 'VM Exception while processing transaction: revert'
     try {
       await contract.createTokens({
-          from: accounts[0],
-          value: '1'
-        })
-      balanceFinal = await contract.balanceOf(accounts[0])
-      balanceFinal = parseFloat(balanceFinal)
-      assert(balanceFinal > balanceStart)
-    } catch (err) {
-      assert.fail(err)
+          from: accounts[1],
+          value: '20'
+      })
+      assert.fail('Create tokens should not have succeded!')
+    } catch (e) {
+      assert.isTrue(
+        e.message.startsWith(`${expectedError}`),
+        `Expected ${expectedError} but got ${e.message} instead!`
+      )
     }
   })
 
-  it('totalSupply increment with token creation', async () => {
-     let totalSupplyStart;
-     let totalSupplyFinal;
-     try {
-         totalSupplyStart = await contract.totalSupply.call();
-         await contract.createTokens({
-             from: accounts[0],
-             value: '2'
-         })
-         totalSupplyFinal = await contract.totalSupply.call()
-         assert(totalSupplyFinal > totalSupplyStart)
-     } catch (err) {
-       assert.fail(err);
-     }
-  });
-
-  // it('only manager can create new tokens', async () => {
-  //     let balance = await fidelityPoints.methods.balanceOf(accounts[1]).call();
-  //     balance = parseFloat(balance);
-  //     console.log("starting balance: " + balance);
-
-  //     try {
-  //         await fidelityPoints.methods.createTokens().send({
-  //             value: '20',
-  //             from: accounts[1]
-  //         });
-  //     } catch (err) {
-  //         balance = await fidelityPoints.methods.balanceOf(accounts[1]).call();
-  //         balance = parseFloat(balance);
-  //         console.log("after catch() balance: " + balance);
-  //         assert(balance == 0);
-  //     }
-  // });
-
-  // it('getSummary', async () => {
-  //     try {
-  //         const summary = await fidelityPoints.methods.getSummary().call();
-  //         console.log("summary[0]: " + summary[0]);
-  //         console.log("summary[1]: " + summary[1]);
-  //         console.log("summary[2]: " + summary[2]);
-  //         console.log("summary[3]: " + summary[3]);
-  //         console.log("summary[4]: " + summary[4]);
-  //         assert(summary[4],"FIDO");
-  //     } catch (err) {
-  //         assert.fail(err);
-  //     }
-  // });
-
-  // it('Should have logged event...', async () => {
-  //   const {
-  //     returnValues: {
-  //       description
-  //     }
-  //   } = await waitForEvent(events.LogNewOraclizeQuery)
-  //   assert.strictEqual(
-  //     description,
-  //     'event print',
-  //     'Oraclize query incorrectly logged!'
-  //   )
-  // })
-
-  // it('Should revert on...', async () => {
-  //   const expErr = 'Transaction has been reverted'
-  //   try {
-  //     await methods
-  //       .update()
-  //       .send({
-  //         from: address,
-  //         gas: gasAmt
-  //       })
-  //     assert.fail('Update transaction should not have succeeded!')
-  //   } catch (e) {
-  //     assert.isTrue(
-  //       e.message.startsWith(`${expErr}`),
-  //       `Expected ${expErr} but got ${e.message} instead!`
-  //     )
-  //   }
-  // })
+  it('getSummary', async () => {
+      const summary = await contract.getSummary();
+      console.log("summary[0]: " + summary[0]);
+      console.log("summary[1]: " + summary[1]);
+      console.log("summary[2]: " + summary[2]);
+      console.log("summary[3]: " + summary[3]);
+      console.log("summary[4]: " + summary[4]);
+      assert.strictEqual(
+        summary[2],
+        tokenSymbol,
+        'Token symbol was not set correctly in the summary'
+      )
+  })
 })
-
