@@ -26,11 +26,11 @@ __`❍ git clone https://github.com/riccardopersiani/fidelity-points-system-thes
 
 __`❍ cd fidelity-points-system-thesis && npm install`__
 
-**5)** Go in `ethereum` folder and compile the code:
+**5)** Go in `ethereum` folder & compile the code:
 
 __`❍ cd ethereum && npx truffle compile`__
 
-**6)** In `fidelity-points-system-thesis`, create a new file `apikeys.js` and add the mnemonic passphrase and the Infura key to it, such as:
+**6)** In `fidelity-points-system-thesis`, create a new file `apikeys.js` & add the mnemonic passphrase and the Infura key to it, such as:
 
 ```javascript
 // apikeys.js example
@@ -49,7 +49,7 @@ __`❍ npx truffle  deploy --network kovan`__
 
 __`❍ npm run dev`__
 
-**9)** Go in the `psd2` folder and start the Express server:
+**9)** Go in the `psd2` folder & start the Express server:
 
 __`❍ cd psd2 && node oauth.js`__
 
