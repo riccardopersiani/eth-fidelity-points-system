@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/riccardopersiani/fidelity-points-system-thesis/compare/v2.0.0...v2.0.1) (2019-05-07)
+
+
+### Bug Fixes
+
+* **readme:** remove .env ([bdf726d](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/bdf726d))
+* **readme:** remove old compiler details ([2f268b6](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/2f268b6))
+* **readme:** remove useless instruction ([41adc5a](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/41adc5a))
+* **utils:** remove console output ([57a41c2](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/57a41c2))
+* create tokens test ([eeeb8f1](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/eeeb8f1))
+* reduce repo weight ([6c98ed6](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/6c98ed6))
+* remove var from express ([a51c6f6](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/a51c6f6))
+* tar vulnerability ([17fc812](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/17fc812))
+
+
+### Features
+
+* add new truffle tests ([7edb114](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/7edb114))
+* **readme:** small update ([8e6911b](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/8e6911b))
+* **test:** add new token supply test ([1e56e14](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/1e56e14))
+* **test:** prepare new tests ([53e9554](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/53e9554))
+* add summary test ([765b914](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/765b914))
+* update readme ([cefad2e](https://github.com/riccardopersiani/fidelity-points-system-thesis/commit/cefad2e))
+
+
+
 ## [2.0.0](https://github.com/riccardopersiani/fidelity-points-system-thesis/compare/v1.1.0...v2.0.0) (2019-05-06)
 
 
