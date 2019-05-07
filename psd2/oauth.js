@@ -2,26 +2,26 @@
 // Copyright 2011-2016 TESOBE Ltd.
 
 // Import express module.
-var express = require('express', template = require('pug'));
-var session = require('express-session');
-var util = require('util');
-var oauth = require('oauth');
-var firebase = require('firebase');
-var app = express();
+const express = require('express', template = require('pug'));
+const session = require('express-session');
+const util = require('util');
+const  oauth = require('oauth');
+const firebase = require('firebase');
+const app = express();
 // Template engine (previously known as Jade).
-var pug = require('pug');
+const pug = require('pug');
 // This loads your consumer key and secret from a file you create.
-var config = require('./config.json');
+const config = require('./config.json');
 // Used to validate forms.
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 // Create application/x-www-form-urlencoded parser.
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 // Take param from config.json file.
-var _openbankConsumerKey = config.consumerKey;
-var _openbankConsumerSecret = config.consumerSecret;
-var _openbankRedirectUrl = config.redirectUrl;
+const _openbankConsumerKey = config.consumerKey;
+const _openbankConsumerSecret = config.consumerSecret;
+const _openbankRedirectUrl = config.redirectUrl;
 // The location, on the interweb, of the OBP API server we want to use.
-var apiHost = config.apiHost;
+const apiHost = config.apiHost;
 console.log ("* apiHost is: " + apiHost)
 
 // Oauth Configuration.
