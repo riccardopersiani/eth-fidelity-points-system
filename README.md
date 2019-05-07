@@ -31,7 +31,7 @@ __`❍ cd fidelity-points-system-thesis && npm install`__
 
 __`❍ cd ethereum && npx truffle compile`__
 
-**6)** In `fidelity-points-system-thesis`, create a new file `apikeys.js` or `.env` and add the mnemonic passphrase and the Infura key to it, such as:
+**6)** In `fidelity-points-system-thesis`, create a new file `apikeys.js` and add the mnemonic passphrase and the Infura key to it, such as:
 
 ```javascript
 // apikeys.js example
