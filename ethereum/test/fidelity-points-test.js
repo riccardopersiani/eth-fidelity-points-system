@@ -24,10 +24,6 @@ contract('❍  Fidelity Points Tests', async accounts => {
     )
   ))
 
-  it('deploys a FidelityPoints contract', () => {
-
-  })
-
   it('marks deployer as the contract owner', async () => {
     const owner = await contract.owner.call();
     assert.strictEqual(
@@ -83,22 +79,19 @@ contract('❍  Fidelity Points Tests', async accounts => {
   })
 
   it('create tokens', async () => {
-    console.log(accounts[0])
+    const acc_balance = await contract.balanceOf.call(accounts[0])
     let balanceFinal
     let balanceStart = await contract.balanceOf(accounts[0])
     balanceStart = parseFloat(balanceStart)
-    console.log(balanceStart)
     try {
-      await contract.createTokens().send({
-        from: accounts[0],
-        value: '1'
-      })
+      await contract.createTokens({
+          from: accounts[0],
+          value: '1'
+        })
       balanceFinal = await contract.balanceOf(accounts[0])
       balanceFinal = parseFloat(balanceFinal)
-      console.log(balanceFinal)
       assert(balanceFinal > balanceStart)
     } catch (err) {
-      console.log(err)
       assert.fail(err)
     }
   })
