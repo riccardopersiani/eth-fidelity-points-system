@@ -4,14 +4,13 @@ Computer Engineering Master's Degree thesis progect at Technical University of T
 
 The purpose of this project is to show a complete Ethereum DApp.
 
-
 ### :building_construction: __Architecture__
 
 These are 2 main components:
 
-__❍__ next.js: server connected to the blockchain.
+__❍__ Next: server connected to the blockchain.
 
-__❍__ express.js: server for authentication via oauth and for performing the PSD2 payment.
+__❍__ Express: server for authentication via oauth and for performing the PSD2 payment.
 
 ### :page_with_curl: __Instructions__:
 
@@ -27,7 +26,7 @@ __`❍ git clone https://github.com/riccardopersiani/fidelity-points-system-thes
 
 __`❍ cd fidelity-points-system-thesis && npm install`__
 
-**5)** Go in `ethereum` folder and run `node compile.js` (Solidity 0.4.25):
+**5)** Go in `ethereum` folder and compile the code:
 
 __`❍ cd ethereum && npx truffle compile`__
 
@@ -42,7 +41,7 @@ module.exports = {
 }
 ```
 
-**7)** Deploy the contracts with Truffle leveraging a testnet, such as Kovan:
+**7)** Deploy the contracts with Truffle on a testnet, such as Kovan:
 
 __`❍ npx truffle  deploy --network kovan`__
 
@@ -50,7 +49,7 @@ __`❍ npx truffle  deploy --network kovan`__
 
 __`❍ npm run dev`__
 
-**9)** Start the Express server:
+**9)** Go in the `psd2` folder and start the Express server:
 
 __`❍ cd psd2 && node oauth.js`__
 
